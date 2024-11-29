@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
 	return (
-		<nav className="navbar navbar-light bg-light">
+		<nav className="navbar navbar-light andaBackgroundColor h-100">
 			<div className="container">
 				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
+					<img src="https://i.ibb.co/zrCKh8H/logo-anda-blanco.png" alt="Logo ANDA" style={{height: "10vh", width: "15vh"}}></img>
 				</Link>
 				<div className="ml-auto">
 					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
+						<button className="btn btn-light andaTextColor">Ingresar</button>
 					</Link>
 				</div>
 			</div>

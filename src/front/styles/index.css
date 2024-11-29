@@ -1,3 +1,14 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+.andaBackgroundColor {
+    background-color: #3865E5;
+}
+
+.andaTextColor {
+    color: #3865E5;
+}
+
+.homeBackgroundImg {
+    background-image: "./img/logo-anda-blanco.png";
+}
