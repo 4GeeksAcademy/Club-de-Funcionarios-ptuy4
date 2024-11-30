@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
 export const Navbar = () => {
 	return (
 		<nav className="navbar navbar-light andaBackgroundColor h-100">
@@ -56,9 +57,11 @@ export const Navbar = () => {
 								<a href="#" className="d-block mb-3 text-decoration-none">
 									Olvidé mi contraseña
 								</a>
+								<Link to="/userLogin">
 								<button type="submit" className="btn btn-primary w-100">
 									Ingresar
 								</button>
+								</Link>
 							</form>
 						</div>
 					</div>
