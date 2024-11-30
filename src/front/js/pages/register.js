@@ -4,41 +4,50 @@ import { Link } from "react-router-dom";
 export const Register = () => {
   return (
     <div
-      className="container-fluid position-relative"
+      className="container-fluid d-flex align-items-center justify-content-center"
       style={{
-        backgroundImage: "url('https://i.ibb.co/rGc9cYg/image-1.png)",
+        backgroundImage: "url('https://i.ibb.co/rGc9cYg/image-1.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "white",
         height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        overflow: "hidden",
-        padding: 0,
         margin: 0,
+        padding: 0,
       }}
     >
-      <div
-        className="position-absolute w-100 h-50 mt-5"
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          top: 0,
-          left: 0,
-        }}
-      ></div>
-
-      <div className="position-relative z-index-1 text-start">
-        <h1 className="mb-4">
-          Te damos la bienvenida al Club de Funcionaros de ANDA.
-        </h1>
-        <p className="mb-4">
-          Inicia sesión o regístrate para disfrutar de tus beneficios como colaborador.
-        </p>
-        <Link to="/register">
-        <button className="btn btn-primary">Registrarme</button>
-        </Link>
+      <div className="row w-100 h-100 m-0">
+        
+        <div
+          className="col-5 d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div className="text-center px-4">
+            <h1 className="mb-4">Registrate</h1>
+            <div class="input-group mb-3">
+              <input type="text" className="form-control" placeholder="Nombre completo" aria-label="nombreCompleto"/>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" className="form-control" placeholder="Nº de colaborador" aria-label="nroColaborador"/>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" className="form-control" placeholder="Email" aria-label="email"/>
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" className="form-control" placeholder="Contraseña" aria-label="contraseña"/>
+            </div>
+            
+            <Link to="/register">
+              <button className="btn btn-primary">Registrate</button>
+            </Link>
+            <p>Al registrate aceptas nuestros</p>
+            <p>terminos y condiciones</p>
+       
+          </div>
+       
+        </div>
+      
       </div>
     </div>
   );
