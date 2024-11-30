@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const Home = () => {
+export const Register = () => {
   return (
     <div
       className="container-fluid position-relative"
       style={{
-        backgroundImage: "url('https://i.ibb.co/M5hmKC5/image.png')",
+        backgroundImage: "url('https://i.ibb.co/rGc9cYg/image-1.png)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "white",
