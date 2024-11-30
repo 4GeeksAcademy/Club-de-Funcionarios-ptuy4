@@ -24,7 +24,7 @@ export const Register = () => {
           }}
         >
           <div className="text-center px-4">
-            <h1 className="mb-4">Registrate</h1>
+            <h1 className="mb-5">Registrate</h1>
             <div class="input-group mb-3">
               <input type="text" className="form-control" placeholder="Nombre completo" aria-label="nombreCompleto"/>
             </div>
@@ -39,10 +39,10 @@ export const Register = () => {
             </div>
             
             <Link to="/register">
-              <button className="btn btn-primary">Registrate</button>
+              <button className="btn btn-primary mb-2">Registrate</button>
             </Link>
-            <p>Al registrate aceptas nuestros</p>
-            <p>terminos y condiciones</p>
+            <p>Al registrate aceptas nuestros<br />
+            terminos y condiciones</p>
        
           </div>
        

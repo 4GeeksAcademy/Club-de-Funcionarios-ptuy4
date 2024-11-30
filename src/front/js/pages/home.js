@@ -29,11 +29,12 @@ export const Home = () => {
         }}
       ></div>
 
-      <div className="position-relative z-index-1 text-start"
-       style={{ top: "-300px" }}
+      <div className="position-relative z-index-1 text-start w-100"
+       style={{ top: "-300px",  paddingLeft: "10px", textAlign: "left" }}
        >
         <h1 className="mb-4">
-          Te damos la bienvenida al Club de Funcionaros de ANDA.
+          Te damos la bienvenida al Club de<br />
+          Funcionaros de ANDA.
         </h1>
         <p className="mb-4">
           Inicia sesión o regístrate para disfrutar de tus beneficios como colaborador.
