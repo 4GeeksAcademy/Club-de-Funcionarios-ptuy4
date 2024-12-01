@@ -14,33 +14,39 @@ export const Home = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        textAlign: "center",
         overflow: "hidden",
         padding: 0,
         margin: 0,
       }}
     >
+      {/* Capa negra con transparencia */}
       <div
-        className="position-absolute w-100 h-50 mt-5"
+        className="position-absolute w-100"
         style={{
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-          top: 0,
+          height: "50%", 
+          top: "25%", 
           left: 0,
         }}
       ></div>
 
-      <div className="position-relative z-index-1 text-start w-100"
-       style={{ top: "-300px",  paddingLeft: "10px", textAlign: "left" }}
-       >
+      {/* Contenido del texto */}
+      <div
+        className="position-relative z-index-1 text-start w-100"
+        style={{
+          paddingLeft: "50px", 
+          textAlign: "left",
+        }}
+      >
         <h1 className="mb-4">
           Te damos la bienvenida al Club de<br />
-          Funcionaros de ANDA.
+          Funcionarios de ANDA.
         </h1>
         <p className="mb-4">
           Inicia sesión o regístrate para disfrutar de tus beneficios como colaborador.
         </p>
         <Link to="/register">
-        <button className="btn btn-primary">Registrarme</button>
+          <button className="btn btn-primary">Registrarme</button>
         </Link>
       </div>
     </div>
