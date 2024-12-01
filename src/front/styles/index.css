@@ -1,6 +1,10 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
 .andaBackgroundColor {
     background-color: #3865E5;
 }
