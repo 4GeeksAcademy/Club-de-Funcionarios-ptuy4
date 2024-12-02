@@ -69,7 +69,7 @@ def is_item_free(item_id, start_date, end_date, reservations):
    
  
 
-if is_item_free (103, "2024-12-14", "2024-12-20", reservas):
+if is_item_free (103, "2024-12-26", "2024-12-28", reservas):
     print ("Disponible")
 else:
     print ("No disponible")
