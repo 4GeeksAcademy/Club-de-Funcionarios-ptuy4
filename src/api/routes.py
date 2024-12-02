@@ -102,6 +102,36 @@ def add_place():
     return jsonify(response_body), 200
 
 
+@api.route('/user/<int:id>', methods=['PUT'])
+def update_user(id):
+
+    response_body = {
+        "message": "Hola, esto eactualiza un usuario"
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/book/<int:id>', methods=['PUT'])
+def upgrade_book(id):
+
+    response_body = {
+        "message": "Hola, esto actualiza un libro"
+    }
+
+    return jsonify(response_body), 200
+
+
+@api.route('/place/<int:id>', methods=['PUT'])
+def upgrade_place(id):
+
+    response_body = {
+        "message": "Hola, esto actualiza un local"
+    }
+
+    return jsonify(response_body), 200
+
+
+
 @api.route('/user/<int:id>', methods=['DELETE'])
 def delete_user(id):
 
