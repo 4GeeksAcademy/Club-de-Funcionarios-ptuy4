@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BackendURL } from "./component/backendURL";
 
@@ -7,6 +7,7 @@ import { Demo } from "./pages/demo";
 import { UserLogin } from "./pages/userLogin";
 import { Register } from "./pages/register";
 import { Single } from "./pages/single";
+import  Library  from "./pages/library";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -18,24 +19,26 @@ const Layout = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
     return (
         <div>
             <BrowserRouter basename={basename}>
-                    <Navbar />
-                    <Routes>
-                        <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Register />} path="/register" />
-                        <Route element={<UserLogin />} path="/userLogin" />
-                        <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<h1>Not found!</h1>} />
-                    </Routes>
-                    <Footer />
+                <Navbar />
+                <Routes>
+                    <Route element={<Home />} path="/" />
+                    <Route element={<Demo />} path="/demo" />
+                    <Route element={<Register />} path="/register" />
+                    <Route element={<UserLogin />} path="/userLogin" />
+                    <Route element={<Library />} path="/library" /> 
+                    <Route element={<Single />} path="/single/:theid" />
+                    <Route element={<h1>Not found!</h1>} path="*" />
+                </Routes>
+                <Footer />
             </BrowserRouter>
         </div>
     );
 };
 
 export default injectContext(Layout);
+

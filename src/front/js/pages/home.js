@@ -43,7 +43,7 @@ export const Home = () => {
           Funcionarios de ANDA.
         </h1>
         <p className="mb-4">
-          Inicia sesión o regístrate para disfrutar de tus beneficios como colaborador.
+          Inicia sesión o registrate para disfrutar de tus beneficios como colaborador.
         </p>
         <Link to="/register">
           <button className="btn btn-primary">Registrarme</button>

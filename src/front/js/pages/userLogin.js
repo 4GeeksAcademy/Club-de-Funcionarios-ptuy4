@@ -49,15 +49,12 @@ export const UserLogin = () => {
         </p>
       </div>
 
-      {/* Biblioteca y Local */}
+      {/* Biblioteca y Locales */}
       <div className="row m-0 text-center">
         <div className="col-md-6 p-0">
-          <Link
-            to="/biblioteca"
-            style={{ textDecoration: "none" }}
-          >
+          <Link to="/library" style={{ textDecoration: "none" }}>
             <div
-              className="position-relative d-flex justify-content-center align-items-center"
+              className="position-relative d-flex justify-content-center align-items-center btn-interactive"
               style={{
                 backgroundImage:
                   "url('https://images.unsplash.com/photo-1485322551133-3a4c27a9d925?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
@@ -85,12 +82,9 @@ export const UserLogin = () => {
           </Link>
         </div>
         <div className="col-md-6 p-0">
-          <Link
-            to="/local"
-            style={{ textDecoration: "none" }}
-          >
+          <Link to="/local" style={{ textDecoration: "none" }}>
             <div
-              className="position-relative d-flex justify-content-center align-items-center"
+              className="position-relative d-flex justify-content-center align-items-center btn-interactive"
               style={{
                 backgroundImage:
                   "url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1798&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
@@ -111,7 +105,7 @@ export const UserLogin = () => {
                 }}
               ></div>
 
-              <h2 style={{ fontSize: "3rem", position: "relative" }}>LOCAL</h2>
+              <h2 style={{ fontSize: "3rem", position: "relative" }}>LOCALES</h2>
             </div>
           </Link>
         </div>

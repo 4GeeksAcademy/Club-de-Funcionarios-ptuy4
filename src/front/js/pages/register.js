@@ -42,7 +42,7 @@ export const Register = () => {
               <button className="btn btn-primary mb-2">Registrate</button>
             </Link>
             <p>Al registrate aceptas nuestros<br />
-            terminos y condiciones</p>
+            términos y condiciones</p>
        
           </div>
        
