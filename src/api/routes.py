@@ -43,29 +43,29 @@ def handle_place():
 
 
 @api.route('/user/<int:id>', methods=['GET'])
-def add_user(id):
+def get_user(id):
 
     response_body = {
-        "message": "Hola, esto sube usuarios"
+        "message": "Hola, esto trae usuarios"
     }
 
     return jsonify(response_body), 200
 
 @api.route('/book/<int:id>', methods=['GET'])
-def hadd_book(id):
+def get_book(id):
 
     response_body = {
-        "message": "Hola, esto sube libros"
+        "message": "Hola, esto trae libros"
     }
 
     return jsonify(response_body), 200
 
 
 @api.route('/place/<int:id>', methods=['GET'])
-def add_place(id):
+def get_place(id):
 
     response_body = {
-        "message": "Hola, esto sube locales"
+        "message": "Hola, esto trae locales"
     }
 
     return jsonify(response_body), 200
@@ -83,7 +83,7 @@ def add_user():
     return jsonify(response_body), 200
 
 @api.route('/book', methods=['POST'])
-def hadd_book():
+def add_book():
 
     response_body = {
         "message": "Hola, esto sube libros"
