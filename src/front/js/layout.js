@@ -10,6 +10,7 @@ import { Single } from "./pages/single";
 import  Library  from "./pages/library";
 import  Locals  from "./pages/locals";
 import { Profile } from "./pages/profile";
+import { AdminPage } from "./pages/adminPage";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -36,6 +37,7 @@ const Layout = () => {
                     <Route element={<Profile />} path="/profile" /> 
                     <Route element={<Single />} path="/single/:theid" />
                     <Route element={<Locals />} path="/locals" />
+                    <Route element={<AdminPage />} path="/adminPage" />
                     <Route element={<h1>Not found!</h1>} path="*" />
                 </Routes>
                 <Footer />
