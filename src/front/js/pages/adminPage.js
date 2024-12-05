@@ -89,8 +89,8 @@ export const AdminPage = () => {
 								<td>Mariana</td>
 								<td>mariana@email.com</td>
 								<td>
-									<button type="button" className="btn btn-secondary m-1">X</button>
-									<button type="button" className="btn btn-secondary m-1">X</button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-pen"></i></button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-trash"/></button>
 								</td>
 							</tr>
 							<tr>
@@ -98,8 +98,8 @@ export const AdminPage = () => {
 								<td>Rodrigo</td>
 								<td>rodrigo@email.com</td>
 								<td>
-									<button type="button" className="btn btn-secondary m-1">X</button>
-									<button type="button" className="btn btn-secondary m-1">X</button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-pen"></i></button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-trash"/></button>
 								</td>
 							</tr>
 							<tr>
@@ -107,17 +107,64 @@ export const AdminPage = () => {
 								<td>Nicoás</td>
 								<td>nicolas@email.com</td>
 								<td>
-									<button type="button" className="btn btn-secondary m-1">X</button>
-									<button type="button" className="btn btn-secondary m-1">X</button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-pen"></i></button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-trash"/></button>
 								</td>
 							</tr>
 						</tbody>
 					</table>
+                    <button type="button" className="btn btn-primary m-4">Agregar</button>
 				</div>
 				</div>
 				<div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-					...
+                <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+					<table className="table">
+						<thead>
+							<tr>
+                            <th scope="col">#</th>
+								<th scope="col">Salon</th>
+								<th scope="col">Capacidad</th>
+								<th scope="col">Dirección</th>
+								<th scope="col">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">1</th>
+								<td>Mariana</td>
+								<td>mariana@email.com</td>
+								<td>mariana@email.com</td>
+								<td>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-pen"></i></button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-trash"/></button>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">2</th>
+								<td>Rodrigo</td>
+								<td>rodrigo@email.com</td>
+								<td>rodrigo@email.com</td>
+								<td>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-pen"></i></button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-trash"/></button>
+								</td>
+							</tr>
+							<tr>
+							<th scope="row">2</th>
+								<td>Nicoás</td>
+								<td>nicolas@email.com</td>
+								<td>nicolas@email.com</td>
+								<td>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-pen"></i></button>
+									<button type="button" className="btn btn-secondary m-1"><i className="fa-solid fa-trash"/></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+                    <button type="button" className="btn btn-primary m-4">Agregar</button>
 				</div>
+				</div>
+                
 			</div>
 		</div>
 	);
