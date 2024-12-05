@@ -89,13 +89,13 @@ const Library = () => {
         <div
           className="col-5 d-flex justify-content-center align-items-center position-relative"
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
           }}
         >
           <div
             className="overlay position-absolute w-100 h-100"
             style={{
-              backgroundColor: "rgba(0, 0, 0, 0.3)",
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
               zIndex: 1,
             }}
           ></div>

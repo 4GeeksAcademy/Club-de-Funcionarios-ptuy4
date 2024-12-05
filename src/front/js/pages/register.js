@@ -25,23 +25,20 @@ export const Register = () => {
         >
           <div className="text-center px-4">
             <h1 className="mb-5">Registrate</h1>
-            <div class="input-group mb-3">
+            <div className="input-group mb-3">
               <input type="text" className="form-control" placeholder="Nombre completo" aria-label="nombreCompleto"/>
             </div>
-            <div class="input-group mb-3">
-              <input type="text" className="form-control" placeholder="Nº de colaborador" aria-label="nroColaborador"/>
-            </div>
-            <div class="input-group mb-3">
+            <div className="input-group mb-3">
               <input type="text" className="form-control" placeholder="Email" aria-label="email"/>
             </div>
-            <div class="input-group mb-3">
+            <div className="input-group mb-3">
               <input type="password" className="form-control" placeholder="Contraseña" aria-label="contraseña"/>
             </div>
             
             <Link to="/register">
               <button className="btn btn-primary mb-2">Registrate</button>
             </Link>
-            <p>Al registrate aceptas nuestros<br />
+            <p>Al registrarte aceptas nuestros<br />
             términos y condiciones</p>
        
           </div>

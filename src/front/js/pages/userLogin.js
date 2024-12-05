@@ -82,7 +82,7 @@ export const UserLogin = () => {
           </Link>
         </div>
         <div className="col-md-6 p-0">
-          <Link to="/local" style={{ textDecoration: "none" }}>
+          <Link to="/locals" style={{ textDecoration: "none" }}>
             <div
               className="position-relative d-flex justify-content-center align-items-center btn-interactive"
               style={{

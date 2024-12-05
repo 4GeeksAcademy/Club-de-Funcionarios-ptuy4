@@ -8,6 +8,7 @@ import { UserLogin } from "./pages/userLogin";
 import { Register } from "./pages/register";
 import { Single } from "./pages/single";
 import  Library  from "./pages/library";
+import  Locals  from "./pages/locals";
 import { Profile } from "./pages/profile";
 import injectContext from "./store/appContext";
 
@@ -34,6 +35,7 @@ const Layout = () => {
                     <Route element={<Library />} path="/library" /> 
                     <Route element={<Profile />} path="/profile" /> 
                     <Route element={<Single />} path="/single/:theid" />
+                    <Route element={<Locals />} path="/locals" />
                     <Route element={<h1>Not found!</h1>} path="*" />
                 </Routes>
                 <Footer />
