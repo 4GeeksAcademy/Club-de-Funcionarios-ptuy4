@@ -20,7 +20,7 @@ export const Register = () => {
         <div
           className="col-5 d-flex justify-content-center align-items-center"
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
           }}
         >
           <div className="text-center px-4">
