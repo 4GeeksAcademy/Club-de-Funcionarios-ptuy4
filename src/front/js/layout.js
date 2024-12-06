@@ -7,10 +7,11 @@ import { Demo } from "./pages/demo";
 import { UserLogin } from "./pages/userLogin";
 import { Register } from "./pages/register";
 import { Single } from "./pages/single";
-import  Library  from "./pages/library";
-import  Locals  from "./pages/locals";
+import Library from "./pages/library";
+import Locals from "./pages/locals";
 import { Profile } from "./pages/profile";
 import { AdminPage } from "./pages/adminPage";
+import { RecoverPassword } from "./pages/recoverPassword";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -38,6 +39,7 @@ const Layout = () => {
                     <Route element={<Single />} path="/single/:theid" />
                     <Route element={<Locals />} path="/locals" />
                     <Route element={<AdminPage />} path="/adminPage" />
+                    <Route element={<RecoverPassword />} path="/recoverPassword" /> {/* Ruta añadida */}
                     <Route element={<h1>Not found!</h1>} path="*" />
                 </Routes>
                 <Footer />
@@ -47,4 +49,5 @@ const Layout = () => {
 };
 
 export default injectContext(Layout);
+
 
