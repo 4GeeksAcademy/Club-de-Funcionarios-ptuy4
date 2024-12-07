@@ -90,14 +90,14 @@ def upload_image_resized():
 @api.route('/user', methods=['GET'])
 def get_users():
     users = User.query.all()
-    result = [{"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active} for user in users]
+    result = [{"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active, "image_url":user.image_url} for user in users]
     return jsonify(result), 200
 
 @api.route('/user/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get(id)
     if user:
-        result = {"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active}
+        result = {"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active, "image_url":user.image_url}
         return jsonify(result), 200
     return jsonify({"error": "User not found"}), 404
 
@@ -114,6 +114,7 @@ def add_user():
         full_name=data.get('full_name'),
         email=data.get('email'),
         password=data.get('password'),
+        image_url=data.get('image_url'),
         is_active=data.get('is_active', True),  # Default True if not provided
         is_admin=data.get('is_admin', False)   # Default False if not provided
     )
@@ -131,6 +132,8 @@ def update_user(id):
     data = request.get_json()
     user.full_name = data.get('full_name', user.full_name)
     user.email = data.get('email', user.email)
+    user.password = data.get('password', user.password)
+    user.image_url = data.get('image_url', user.image_url)
     user.is_active = data.get('is_active', user.is_active)
     db.session.commit()
     return jsonify({"message": "User updated successfully"}), 200
@@ -191,21 +194,26 @@ def delete_book(id):
 @api.route('/place', methods=['GET'])
 def get_places():
     locations = Location.query.all()
-    result = [{"location_id": loc.location_id, "name": loc.name, "capacity": loc.capacity, "address": loc.address, "is_active": loc.is_active} for loc in locations]
+    result = [{"location_id": loc.location_id, "name": loc.name, "capacity": loc.capacity, "address": loc.address, "is_active": loc.is_active, "image_url": loc.image_url} for loc in locations]
     return jsonify(result), 200
 
 @api.route('/place/<int:id>', methods=['GET'])
 def get_place(id):
     location = Location.query.get(id)
     if location:
-        result = {"location_id": location.location_id, "name": location.name, "capacity": location.capacity, "address": location.address, "is_active": location.is_active}
+        result = {"location_id": location.location_id, "name": location.name, "capacity": location.capacity, "address": location.address, "is_active": location.is_active, "image_url": location.image_url}
         return jsonify(result), 200
     return jsonify({"error": "Location not found"}), 404
 
 @api.route('/place', methods=['POST'])
 def add_place():
     data = request.get_json()
-    new_location = Location(name=data.get('name'), capacity=data.get('capacity'), address=data.get('address'))
+    new_location = Location(
+        name=data.get('name'),
+        capacity=data.get('capacity'),
+        address=data.get('address'),
+        image_url=data.get('image_url')
+        )
     db.session.add(new_location)
     db.session.commit()
     return jsonify({"message": "Location added successfully", "location_id": new_location.location_id}), 201
@@ -219,6 +227,7 @@ def update_place(id):
     location.name = data.get('name', location.name)
     location.capacity = data.get('capacity', location.capacity)
     location.address = data.get('address', location.address)
+    location.image_url = data.get('image_url', location.image_url)
     location.is_active = data.get('is_active', location.is_active)
     db.session.commit()
     return jsonify({"message": "Location updated successfully"}), 200

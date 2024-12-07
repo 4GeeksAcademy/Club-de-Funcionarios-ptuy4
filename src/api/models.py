@@ -8,6 +8,7 @@ class User(db.Model):
     full_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)  
     password = db.Column(db.String(50), nullable=False, unique=False)
+    image_url = db.Column(db.String(250), nullable=True, unique=False)
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
 
@@ -32,6 +33,7 @@ class Location(db.Model):
     name = db.Column(db.String(100), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     address = db.Column(db.String(200), nullable=False)
+    image_url = db.Column(db.String(250), nullable=True, unique=False)
     is_active = db.Column(db.Boolean, default=True)
 
     # Relationships
