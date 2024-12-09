@@ -8,7 +8,7 @@ export const AdminPage = () => {
 
 	return (
 		<div>
-			<div className="card mb-3" style={{ "max-width": "540px;" }}>
+			<div className="card mb-3" style={{ "maxWidth": "540px" }}>
 				<div className="row g-0">
 					<div className="col-md-6">
 						<img src="https://img.freepik.com/vector-premium/icono-perfil-simple-color-blanco-icono_1076610-50204.jpg"
@@ -31,7 +31,7 @@ export const AdminPage = () => {
 			</nav>
 
 			<div className="tab-content mx-4" id="nav-tabContent">
-				<div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+				<div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabIndex="0">
 					<table className="table">
 						<thead>
 							<tr>
@@ -72,8 +72,8 @@ export const AdminPage = () => {
 						</tbody>
 					</table>
 				</div>
-				<div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-				<div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+				<div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabIndex="0">
+				<div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabIndex="0">
 					<table className="table">
 						<thead>
 							<tr>
@@ -116,8 +116,8 @@ export const AdminPage = () => {
                     <button type="button" className="btn btn-primary m-4">Agregar</button>
 				</div>
 				</div>
-				<div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-                <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+				<div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabIndex="0">
+                <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabIndex="0">
 					<table className="table">
 						<thead>
 							<tr>
