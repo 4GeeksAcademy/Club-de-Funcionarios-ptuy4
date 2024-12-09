@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { es } from 'date-fns/locale';
 import "../../styles/index.css";
 
 const Locals = () => {
@@ -37,6 +38,7 @@ const Locals = () => {
             Locales
           </h1>
           <DateRange
+            locale={es}
             ranges={[selectionRange]}
             onChange={handleSelect}
             showSelectionPreview={true}

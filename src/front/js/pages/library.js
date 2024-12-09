@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { es } from 'date-fns/locale';
 import "../../styles/index.css";
 
 const Library = () => {
   const [selectionRange, setSelectionRange] = useState({
-    startDate: null,
-    endDate: null,
+    startDate: new Date(),
+    endDate: new Date(),
     key: "selection",
   });
   const [errorMessage, setErrorMessage] = useState(""); // Mensaje de error
@@ -18,6 +19,7 @@ const Library = () => {
 
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);
+    console.log(ranges);
   };
 
   // Libros disponibles para la búsqueda (luego reemplazamos a datos reales de backend)
@@ -115,6 +117,7 @@ const Library = () => {
               Biblioteca
             </h1>
             <DateRange
+              locale={es}
               ranges={[selectionRange]}
               onChange={handleSelect}
               showSelectionPreview={true}
