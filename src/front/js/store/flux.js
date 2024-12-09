@@ -1,18 +1,6 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 	  store: {
-		demo: [
-		  {
-			title: "FIRST",
-			background: "white",
-			initial: "white",
-		  },
-		  {
-			title: "SECOND",
-			background: "white",
-			initial: "white",
-		  },
-		],
 		token: localStorage.getItem("token") || null, // Guardar el token si existe
 		user: null, // Información del usuario autenticado
 		isAuthenticated: localStorage.getItem("token") ? true : false, // Añadir esta línea para saber si está autenticado
@@ -84,9 +72,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return false;
 			}
 		},
-		
-		  
-  
 		// Función para cerrar sesión
 		logout: () => {
 		  // Eliminar el token del localStorage y limpiar el estado global
@@ -128,9 +113,179 @@ const getState = ({ getStore, getActions, setStore }) => {
 			  console.error("Error al obtener datos protegidos:", error);
 			}
 		  },
+		  // Acciones para gestionar libros
+		  getBooks: async () => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/book`, {
+					method: "GET",
+				});
+				if (response.ok) {
+					const data = await response.json();
+					return data;
+				}
+			} catch (error) {
+				console.error("Error al obtener libros:", error);
+			}
+		},
 
-		  
-		  
+		addBook: async (title, author) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/book`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ title, author }),
+				});
+				if (response.ok) {
+					alert("Libro añadido exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al añadir libro:", error);
+			}
+		},
+
+		updateBook: async (id, updatedData) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/book/${id}`, {
+					method: "PUT",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(updatedData),
+				});
+				if (response.ok) {
+					alert("Libro actualizado exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al actualizar libro:", error);
+			}
+		},
+
+		deleteBook: async (id) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/book/${id}`, {
+					method: "DELETE",
+				});
+				if (response.ok) {
+					alert("Libro eliminado exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al eliminar libro:", error);
+			}
+		},
+
+		// Acciones para gestionar lugares
+		getPlaces: async () => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/place`, {
+					method: "GET",
+				});
+				if (response.ok) {
+					const data = await response.json();
+					return data;
+				}
+			} catch (error) {
+				console.error("Error al obtener lugares:", error);
+			}
+		},
+
+		addPlace: async (newPlace) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/place`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(newPlace),
+				});
+				if (response.ok) {
+					alert("Lugar añadido exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al añadir lugar:", error);
+			}
+		},
+
+		updatePlace: async (id, updatedData) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/place/${id}`, {
+					method: "PUT",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(updatedData),
+				});
+				if (response.ok) {
+					alert("Lugar actualizado exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al actualizar lugar:", error);
+			}
+		},
+
+		deletePlace: async (id) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/place/${id}`, {
+					method: "DELETE",
+				});
+				if (response.ok) {
+					alert("Lugar eliminado exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al eliminar lugar:", error);
+			}
+		},
+
+		// Acciones para gestionar schedules
+		getSchedules: async () => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/schedule`, {
+					method: "GET",
+				});
+				if (response.ok) {
+					const data = await response.json();
+					return data;
+				}
+			} catch (error) {
+				console.error("Error al obtener horarios:", error);
+			}
+		},
+
+		addSchedule: async (newSchedule) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/schedule`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(newSchedule),
+				});
+				if (response.ok) {
+					alert("Horario añadido exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al añadir horario:", error);
+			}
+		},
+
+		updateSchedule: async (id, updatedData) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/schedule/${id}`, {
+					method: "PUT",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(updatedData),
+				});
+				if (response.ok) {
+					alert("Horario actualizado exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al actualizar horario:", error);
+			}
+		},
+
+		deleteSchedule: async (id) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/schedule/${id}`, {
+					method: "DELETE",
+				});
+				if (response.ok) {
+					alert("Horario eliminado exitosamente");
+				}
+			} catch (error) {
+				console.error("Error al eliminar horario:", error);
+			}
+		},
 	  },
 	};
   };

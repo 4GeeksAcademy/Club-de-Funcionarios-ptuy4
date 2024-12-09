@@ -39,6 +39,7 @@ export const Navbar = () => {
   return (
     <nav className="navbar navbar-light andaBackgroundColor h-100">
       <div className="container d-flex align-items-center justify-content-between">
+      {!store.isAuthenticated && (
         <Link to="/">
           <img
             src="https://i.ibb.co/zrCKh8H/logo-anda-blanco.png"
@@ -46,7 +47,16 @@ export const Navbar = () => {
             style={{ height: "10vh", width: "15vh" }}
           />
         </Link>
-
+        )}
+      {store.isAuthenticated && (
+        <Link to="/userLogin">
+          <img
+            src="https://i.ibb.co/zrCKh8H/logo-anda-blanco.png"
+            alt="Logo ANDA"
+            style={{ height: "10vh", width: "15vh" }}
+          />
+        </Link>
+        )}
         {/* Mostrar solo si el usuario está logueado */}
         {store.isAuthenticated && (
           <div className="d-flex gap-4">
