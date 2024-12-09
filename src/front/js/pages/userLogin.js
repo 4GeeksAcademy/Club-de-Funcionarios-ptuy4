@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext"; // Asegúrate de importar el contexto
 
 export const UserLogin = () => {
+  const { store } = useContext(Context); // Accede al store desde el contexto
+
+  
+
+  // Extraemos el nombre del usuario desde el store (asumiendo que está en store.user.name)
+  const userName = store.user ? store.user.name : "no tengo el nombre"; // Usa "Usuario" como valor por defecto
+
   return (
     <div
       className="container-fluid position-relative"
@@ -41,7 +49,9 @@ export const UserLogin = () => {
           }}
         ></div>
 
-        <h1 className="mb-3" style={{ position: "relative" }}>¡Hola! Usuario</h1>
+        <h1 className="mb-3" style={{ position: "relative" }}>
+          ¡Hola! {userName}
+        </h1>
         <p style={{ maxWidth: "600px", position: "relative" }}>
           Comenzá a disfrutar de tus beneficios como nuestro colaborador, podés
           reservar libros de la biblioteca o realizar la reserva del local de

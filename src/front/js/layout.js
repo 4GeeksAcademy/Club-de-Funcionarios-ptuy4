@@ -13,6 +13,7 @@ import { Profile } from "./pages/profile";
 import { AdminPage } from "./pages/adminPage";
 import { RecoverPassword } from "./pages/recoverPassword";
 import injectContext from "./store/appContext";
+import ProtectedRoute from "./component/protectedRoute";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -33,7 +34,7 @@ const Layout = () => {
                     <Route element={<Home />} path="/" />
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Register />} path="/register" />
-                    <Route element={<UserLogin />} path="/userLogin" />
+                    
                     <Route element={<Library />} path="/library" /> 
                     <Route element={<Profile />} path="/profile" /> 
                     <Route element={<Single />} path="/single/:theid" />
@@ -41,6 +42,18 @@ const Layout = () => {
                     <Route element={<AdminPage />} path="/adminPage" />
                     <Route element={<RecoverPassword />} path="/recoverPassword" /> {/* Ruta añadida */}
                     <Route element={<h1>Not found!</h1>} path="*" />
+
+                    {/* Ruta protegida con ProtectedRoute */}
+                    <Route
+                            path="/userLogin"
+                            element={
+                                <ProtectedRoute>
+                                    <UserLogin />
+                                </ProtectedRoute>
+                            }
+                        />
+
+
                 </Routes>
                 <Footer />
             </BrowserRouter>

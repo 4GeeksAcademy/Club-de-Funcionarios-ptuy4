@@ -8,6 +8,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import cloudinary.uploader
 import cloudinary
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
 api = Blueprint('api', __name__)
 
@@ -90,16 +91,35 @@ def upload_image_resized():
 @api.route('/user', methods=['GET'])
 def get_users():
     users = User.query.all()
-    result = [{"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active, "image_url":user.image_url} for user in users]
+    result = [{"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active, "image_url":user.image_url, "is_admin":user.is_admin} for user in users]
     return jsonify(result), 200
 
 @api.route('/user/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get(id)
     if user:
-        result = {"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active, "image_url":user.image_url}
+        result = {"user_id": user.user_id, "full_name": user.full_name, "email": user.email, "is_active": user.is_active, "is_admin":user.is_admin, "image_url":user.image_url}
         return jsonify(result), 200
     return jsonify({"error": "User not found"}), 404
+
+@api.route('/user/<string:email>', methods=['GET'])
+def get_user_by_email(email):
+    # Buscar al usuario por su email
+    user = User.query.filter_by(email=email).first()
+    if user:
+        # Construir la respuesta con los datos del usuario
+        result = {
+            "user_id": user.user_id,
+            "full_name": user.full_name,
+            "email": user.email,
+            "is_active": user.is_active,
+            "is_admin": user.is_admin,
+            "image_url": user.image_url
+        }
+        return jsonify(result), 200
+    # Devolver error si no se encuentra el usuario
+    return jsonify({"error": "User not found"}), 404
+
 
 @api.route('/user', methods=['POST'])
 def add_user():
@@ -349,4 +369,39 @@ def delete_schedule(id):
     db.session.delete(schedule)
     db.session.commit()
     return jsonify({"message": "Schedule deleted successfully"}), 200
+
+#Login
+
+@api.route('/login', methods=['POST'])
+def login():
+    
+    body = request.json
+    
+    
+    email = body.get("email", None)
+    password = body.get("password", None)
+
+    user = User.query.filter_by(email=email).one_or_none()
+
+    if user == None:
+        return jsonify ({"msg":"Bad email or password"}), 401
+    
+    if user.password != password:
+        return jsonify ({"msg": "Bad email or password"}), 401
+    
+    access_token = create_access_token(identity=user.email)
+    return jsonify ({
+        "token": access_token,  # Devuelves el token
+        "user": {
+            "email": user.email,
+            "name": user.full_name,
+            "is_admin": user.is_admin
+        }    
+        }), 201
+
+@api.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+        current_user = get_jwt_identity()
+        return jsonify(logged_in_as=current_user), 200
 
