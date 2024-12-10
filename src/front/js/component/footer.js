@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 
 export const Footer = () => (
-	<footer className="footer mt-auto py-3 text-center andaBackgroundColor">
+	<footer className="footer mt-auto py-3 text-center andaBackgroundColor" style={{ color: 'white', fontSize: '12px' }}>
 		<p>
-			Made with <i className="fa fa-heart text-danger" /> by{" "}
-			<a href="http://www.4geeksacademy.com"></a>
-			Grupo 3
+			<b>ANDA</b> - Todos los derechos reservados.
 		</p>
 	</footer>
 );
