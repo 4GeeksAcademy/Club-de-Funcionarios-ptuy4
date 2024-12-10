@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { Context } from "../store/appContext"; // Asegúrate de importar el contexto
+import { Context } from "../store/appContext";
 
 const ProtectedRoute = ({ children }) => {
   const { store } = useContext(Context); // Obtenemos el estado global, donde guardamos el token
