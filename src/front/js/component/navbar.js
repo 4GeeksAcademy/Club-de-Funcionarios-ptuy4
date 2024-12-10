@@ -63,7 +63,7 @@ export const Navbar = () => {
             <Link to="/profile" className="text-decoration-none text-white">
               Mi Perfil
             </Link>
-            <Link to="/mis-reservas" className="text-decoration-none text-white">
+            <Link to="/myReservations" className="text-decoration-none text-white">
               Mis Reservas
             </Link>
 

@@ -12,6 +12,7 @@ import Locals from "./pages/locals";
 import { Profile } from "./pages/profile";
 import { AdminPage } from "./pages/adminPage";
 import { RecoverPassword } from "./pages/recoverPassword";
+import { MyReservations } from "./pages/myReservations";
 import injectContext from "./store/appContext";
 import ProtectedRoute from "./component/protectedRoute";
 
@@ -31,29 +32,31 @@ const Layout = () => {
             <BrowserRouter basename={basename}>
                 <Navbar />
                 <Routes>
+                    {/* Rutas principales */}
                     <Route element={<Home />} path="/" />
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Register />} path="/register" />
-                    
+                    <Route element={<UserLogin />} path="/userLogin" />
                     <Route element={<Library />} path="/library" /> 
                     <Route element={<Profile />} path="/profile" /> 
                     <Route element={<Single />} path="/single/:theid" />
                     <Route element={<Locals />} path="/locals" />
                     <Route element={<AdminPage />} path="/adminPage" />
-                    <Route element={<RecoverPassword />} path="/recoverPassword" /> {/* Ruta añadida */}
-                    <Route element={<h1>Not found!</h1>} path="*" />
-
+                    <Route element={<RecoverPassword />} path="/recoverPassword" />
+                    <Route element={<MyReservations />} path="/myReservations" />
+                    
                     {/* Ruta protegida con ProtectedRoute */}
                     <Route
-                            path="/userLogin"
-                            element={
-                                <ProtectedRoute>
-                                    <UserLogin />
-                                </ProtectedRoute>
-                            }
-                        />
+                        path="/userLogin"
+                        element={
+                            <ProtectedRoute>
+                                <UserLogin />
+                            </ProtectedRoute>
+                        }
+                    />
 
-
+                    {/* Ruta para páginas no encontradas */}
+                    <Route element={<h1>Not found!</h1>} path="*" />
                 </Routes>
                 <Footer />
             </BrowserRouter>
@@ -62,5 +65,3 @@ const Layout = () => {
 };
 
 export default injectContext(Layout);
-
-
