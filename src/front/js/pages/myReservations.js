@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const reservations = [
@@ -12,23 +12,32 @@ const reservations = [
   {
     id: 2,
     type: "Local",
-    venue: "Salón de Eventos A",
+    venue: "Local 1",
     startDate: "2023-10-15",
     endDate: "2023-10-16",
   },
 ];
 
 export const MyReservations = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState(null);
+
   const handleCancel = (id) => {
-    // Lógica para cancelar la reserva
-    console.log(`Reserva con ID ${id} cancelada`);
+    setSelectedReservation(id);
+    setShowModal(true);
+  };
+
+  const confirmCancel = () => {
+    console.log(`Reserva con ID ${selectedReservation} cancelada`);
+    setShowModal(false);
   };
 
   return (
     <div
       className="container-fluid d-flex align-items-center justify-content-center"
       style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2072&auto=format&fit=crop')", // Cambia la URL si es necesario
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1649433391719-2e784576d044?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "white",
@@ -37,14 +46,17 @@ export const MyReservations = () => {
         padding: 0,
       }}
     >
-      <div className="row w-100 h-100 m-0">
+      <div
+        className="row w-100 h-100 d-flex justify-content-center align-items-center"
+        style={{ margin: 0 }}
+      >
         <div
-          className="col-8 d-flex flex-column align-items-center"
+          className="col-12 col-md-8 d-flex flex-column align-items-center"
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
             borderRadius: "10px",
             padding: "30px",
-            overflowY: "auto", // Por si hay muchas reservas
+            overflowY: "auto",
             maxHeight: "90vh",
           }}
         >
@@ -58,11 +70,13 @@ export const MyReservations = () => {
                 key={reservation.id}
                 className="card mb-3 w-100"
                 style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
                   border: "none",
+                  borderRadius: "10px",
+                  padding: "15px",
                 }}
               >
-                <div className="card-body">
+                <div className="card-body text-center">
                   <h5 className="card-title">{reservation.type}</h5>
                   {reservation.type === "Biblioteca" ? (
                     <p>
@@ -89,11 +103,52 @@ export const MyReservations = () => {
             ))
           )}
 
-          <Link to="/">
+          <Link to="/userLogin">
             <button className="btn btn-secondary mt-4">Volver a Inicio</button>
           </Link>
         </div>
       </div>
+
+{/* Modal */}
+{showModal && selectedReservation && (
+  <div
+    className="modal d-block"
+    style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+  >
+    <div className="modal-dialog">
+      <div className="modal-content" style={{ color: "black" }}>
+        <div className="modal-header">
+          <h5 className="modal-title">Confirmar Cancelación</h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setShowModal(false)}
+          ></button>
+        </div>
+        <div className="modal-body">
+          <p>
+            ¿Estás seguro de que deseas cancelar la reserva de{" "}
+            <strong>
+              {reservations.find((res) => res.id === selectedReservation).type}
+            </strong>
+            ?
+          </p>
+        </div>
+        <div className="modal-footer">
+          <button
+            className="btn btn-secondary"
+            onClick={() => setShowModal(false)}
+          >
+            Cerrar
+          </button>
+          <button className="btn btn-danger" onClick={confirmCancel}>
+            Cancelar Reserva
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
