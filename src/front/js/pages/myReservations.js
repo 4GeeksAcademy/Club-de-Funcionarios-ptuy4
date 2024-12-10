@@ -37,7 +37,7 @@ export const MyReservations = () => {
       className="container-fluid d-flex align-items-center justify-content-center"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1649433391719-2e784576d044?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+          "url('https://images.unsplash.com/photo-1435527173128-983b87201f4d?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "white",
@@ -57,7 +57,7 @@ export const MyReservations = () => {
             borderRadius: "10px",
             padding: "30px",
             overflowY: "auto",
-            maxHeight: "90vh",
+            maxHeight: "100vh"
           }}
         >
           <h1 className="mb-4">Mis Reservas</h1>
