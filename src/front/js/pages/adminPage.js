@@ -125,15 +125,71 @@ export const AdminPage = () => {
 									<td>{libro.title}</td>
 									<td>{libro.author}</td>
 									<td>
-										<button type="button" className="btn btn-secondary m-1">
+
+								{/* EDITAR LIBRO */}
+										<button type="button" className="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#editBookModal" data-bs-whatever="@mdo">
 											<i className="fa-solid fa-pen"></i>
 										</button>
-										<button type="button" className="btn btn-secondary m-1">
+										<div className="modal fade" id="editBookModal" tabindex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">
+											<div className="modal-dialog">
+												<div className="modal-content">
+													<div className="modal-header">
+														<h1 className="modal-title fs-5" id="editBookModalLabel">Editar libro</h1>
+														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div className="modal-body">
+														<form>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Titulo:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Autor:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+														</form>
+													</div>
+													<div className="modal-footer">
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+														<button type="button" className="btn btn-primary">Confirmar</button>
+													</div>
+												</div>
+											</div>
+										</div>
+								{/* BORRAR LIBRO */}
+										<button type="button" className="btn btn-danger m-1">
 											<i className="fa-solid fa-trash"></i>
-										</button>
-										<button type="button" className="btn btn-primary m-1">
+										</button>	
+								{/* AGREGAR LIBRO */}
+										<button type="button" className="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#addBookModal" data-bs-whatever="@fat">
 											<i className="fa-solid fa-plus"></i>
 										</button>
+										<div className="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+											<div className="modal-dialog">
+												<div className="modal-content">
+													<div className="modal-header">
+														<h1 className="modal-title fs-5" id="addBookModalLabel">Agregar libro</h1>
+														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div className="modal-body">
+														<form>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Titulo:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Autor:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+														</form>
+													</div>
+													<div className="modal-footer">
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+														<button type="button" className="btn btn-primary">Agregar</button>
+													</div>
+												</div>
+											</div>
+										</div>
 									</td>
 								</tr>
 							))}
@@ -161,15 +217,78 @@ export const AdminPage = () => {
 									<td>{local.capacity}</td>
 									<td>{local.address}</td>
 									<td>
-										<button type="button" className="btn btn-secondary m-1">
+									{/* EDITAR LOCAL */}
+										<button type="button" className="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="@mdo">
 											<i className="fa-solid fa-pen"></i>
 										</button>
-										<button type="button" className="btn btn-secondary m-1">
+										<div className="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+											<div className="modal-dialog">
+												<div className="modal-content">
+													<div className="modal-header">
+														<h1 className="modal-title fs-5" id="editModalLabel">Editar libro</h1>
+														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div className="modal-body">
+														<form>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Nombre:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Capacidad:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Dirección:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+														</form>
+													</div>
+													<div className="modal-footer">
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+														<button type="button" className="btn btn-primary">Confirmar</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									{/* BORRAR LOCAL */}
+										<button type="button" className="btn btn-danger m-1">
 											<i className="fa-solid fa-trash"></i>
 										</button>
-										<button type="button" className="btn btn-primary m-1">
+									{/* AGREGAR LOCAL */}
+										<button type="button" className="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#addModal" data-bs-whatever="@fat">
 											<i className="fa-solid fa-plus"></i>
 										</button>
+										<div className="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+											<div className="modal-dialog">
+												<div className="modal-content">
+													<div className="modal-header">
+														<h1 className="modal-title fs-5" id="addModalLabel">Agregar local</h1>
+														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div className="modal-body">
+														<form>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Nombre:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Capacidad:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+															<div className="mb-3">
+																<label for="recipient-name" className="col-form-label">Dirección:</label>
+																<input type="text" className="form-control" id="recipient-name"/>
+															</div>
+														</form>
+													</div>
+													<div className="modal-footer">
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+														<button type="button" className="btn btn-primary">Agregar</button>
+													</div>
+												</div>
+											</div>
+										</div>
 									</td>
 								</tr>
 							))}
