@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { es } from 'date-fns/locale';
 import "../../styles/index.css";
+import { Context } from "../store/appContext";
 
 const Locals = () => {
+  const { store, actions } = useContext(Context);
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
     key: "selection",
   });
+
+  useEffect(() => {
+    actions.getPlaces();
+  }, []);
+
+  const availableBooks = store.places;
 
   const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
 

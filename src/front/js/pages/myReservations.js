@@ -1,26 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
-const reservations = [
-  {
-    id: 1,
-    type: "Biblioteca",
-    items: ["Libro 1", "Libro 2", "Libro 3"],
-    startDate: "2023-10-01",
-    endDate: "2023-10-10",
-  },
-  {
-    id: 2,
-    type: "Local",
-    venue: "Local 1",
-    startDate: "2023-10-15",
-    endDate: "2023-10-16",
-  },
-];
+const reservations = [];
 
 export const MyReservations = () => {
+  const { store, actions } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState(null);
+
+  useEffect(() => {
+		reservations = actions.getUserSchedule(store.user.user_id);
+	}, []);
 
   const handleCancel = (id) => {
     setSelectedReservation(id);

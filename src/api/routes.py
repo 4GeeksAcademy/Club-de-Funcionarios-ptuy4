@@ -297,6 +297,25 @@ def get_schedule(id):
         return jsonify(result), 200
     return jsonify({"error": "Schedule not found"}), 404
 
+@api.route('/schedule/user/<int:user_id>', methods=['GET'])
+def get_schedules_by_user(user_id):
+    schedules = Schedule.query.filter_by(user_id=user_id).all()
+    if schedules:
+        results = []
+        for schedule in schedules:
+            results.append({
+                "schedule_id": schedule.schedule_id,
+                "user_id": schedule.user_id,
+                "book_id": schedule.book_id,
+                "location_id": schedule.location_id,
+                "start_time": schedule.start_time.isoformat(),
+                "end_time": schedule.end_time.isoformat(),
+                "status": schedule.status,
+                "created_at": schedule.created_at.isoformat(),
+            })
+        return jsonify(results), 200
+    return jsonify({"error": "No schedules found for this user"}), 404
+
 
 @api.route('/schedule', methods=['POST'])
 def add_schedule():
@@ -374,13 +393,9 @@ def delete_schedule(id):
 
 @api.route('/login', methods=['POST'])
 def login():
-    
     body = request.json
-    
-    
     email = body.get("email", None)
     password = body.get("password", None)
-
     user = User.query.filter_by(email=email).one_or_none()
 
     if user == None:
@@ -391,8 +406,9 @@ def login():
     
     access_token = create_access_token(identity=user.email)
     return jsonify ({
-        "token": access_token,  # Devuelves el token
+        "token": access_token,
         "user": {
+            "user_id": user.user_id,
             "email": user.email,
             "name": user.full_name,
             "is_admin": user.is_admin

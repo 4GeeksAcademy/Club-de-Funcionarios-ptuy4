@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { es } from 'date-fns/locale';
 import "../../styles/index.css";
+import { Context } from "../store/appContext";
 
 const Library = () => {
+  const { store, actions } = useContext(Context);
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
     key: "selection",
   });
-  const [errorMessage, setErrorMessage] = useState(""); // Mensaje de error
 
+  useEffect(() => {
+    actions.getBooks();
+  }, []);
+
+  const [errorMessage, setErrorMessage] = useState(""); // Mensaje de error
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [selectedBooks, setSelectedBooks] = useState([]);
@@ -22,14 +28,9 @@ const Library = () => {
     console.log(ranges);
   };
 
-  // Libros disponibles para la búsqueda (luego reemplazamos a datos reales de backend)
-  const availableBooks = [
-    { author: "Gabriel García Márquez", title: "Cien años de soledad" },
-    { author: "J.K. Rowling", title: "Harry Potter y la piedra filosofal" },
-    { author: "George Orwell", title: "1984" },
-    { author: "J.R.R. Tolkien", title: "El señor de los anillos" },
-    { author: "Jane Austen", title: "Orgullo y prejuicio" },
-  ];
+  // Libros disponibles para la búsqueda
+  const availableBooks = store.books;
+  console.log(availableBooks)
 
   const handleSearch = () => {
     const results = availableBooks.filter(
@@ -73,6 +74,7 @@ const Library = () => {
 
     // Si no hay errores, hacer la reserva
     setErrorMessage(""); // Limpiar el mensaje de error
+
     alert("Reserva realizada con éxito");
   };
 

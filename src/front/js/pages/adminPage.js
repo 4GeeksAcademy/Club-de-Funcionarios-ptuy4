@@ -9,6 +9,7 @@ export const AdminPage = () => {
 		actions.getUsers();
 		actions.getBooks();
 		actions.getPlaces();
+		actions.getSchedules();
 	}, []);
 
 	return (
@@ -35,46 +36,58 @@ export const AdminPage = () => {
 				<div className="nav nav-tabs nav justify-content-center">
 					<button
 						className="nav-link active"
-						id="nav-home-tab"
+						id="nav-users-tab"
 						data-bs-toggle="tab"
-						data-bs-target="#nav-home"
+						data-bs-target="#nav-users"
 						type="button"
 						role="tab"
-						aria-controls="nav-home"
+						aria-controls="nav-users"
 						aria-selected="true"
 					>
 						Usuarios
 					</button>
 					<button
 						className="nav-link"
-						id="nav-profile-tab"
+						id="nav-books-tab"
 						data-bs-toggle="tab"
-						data-bs-target="#nav-profile"
+						data-bs-target="#nav-books"
 						type="button"
 						role="tab"
-						aria-controls="nav-profile"
+						aria-controls="nav-books"
 						aria-selected="false"
 					>
 						Libros
 					</button>
 					<button
 						className="nav-link"
-						id="nav-contact-tab"
+						id="nav-places-tab"
 						data-bs-toggle="tab"
-						data-bs-target="#nav-contact"
+						data-bs-target="#nav-places"
 						type="button"
 						role="tab"
-						aria-controls="nav-contact"
+						aria-controls="nav-places"
 						aria-selected="false"
 					>
 						Locales
+					</button>
+					<button
+						className="nav-link"
+						id="nav-schedules-tab"
+						data-bs-toggle="tab"
+						data-bs-target="#nav-schedules"
+						type="button"
+						role="tab"
+						aria-controls="nav-schedules"
+						aria-selected="false"
+					>
+						Reservas
 					</button>
 				</div>
 			</nav>
 
 			<div className="tab-content mx-4" id="nav-tabContent">
 				{/* Usuarios */}
-				<div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+				<div className="tab-pane fade show active" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
 					<table className="table">
 						<thead>
 							<tr>
@@ -90,6 +103,7 @@ export const AdminPage = () => {
 									<th scope="row">{index + 1}</th>
 									<td>{usuario.full_name}</td>
 									<td>{usuario.email}</td>
+									<td>{usuario.is_admin ? 'Sí' : 'No'}</td>
 									<td>
 										<button type="button" className="btn btn-secondary m-1">
 											<i className="fa-solid fa-pen"></i>
@@ -108,7 +122,7 @@ export const AdminPage = () => {
 				</div>
 
 				{/* Libros */}
-				<div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+				<div className="tab-pane fade" id="nav-books" role="tabpanel" aria-labelledby="nav-books-tab">
 					<table className="table">
 						<thead>
 							<tr>
@@ -198,7 +212,7 @@ export const AdminPage = () => {
 				</div>
 
 				{/* Locales */}
-				<div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+				<div className="tab-pane fade" id="nav-places" role="tabpanel" aria-labelledby="nav-places-tab">
 					<table className="table">
 						<thead>
 							<tr>
@@ -289,6 +303,47 @@ export const AdminPage = () => {
 												</div>
 											</div>
 										</div>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+				{/* Reservas */}
+				<div className="tab-pane fade" id="nav-schedules" role="tabpanel" aria-labelledby="nav-schedules-tab">
+					<table className="table">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Usuario</th>
+								<th scope="col">Tipo</th>
+								<th scope="col">Fecha de inicio</th>
+								<th scope="col">Fecha de fin</th>
+								<th scope="col">Estado</th>
+								<th scope="col">Fecha de creación</th>
+								<th scope="col">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{store.schedules.map((schedule, index) => (
+								<tr key={index}>
+									<th scope="row">{index + 1}</th>
+									<td>{schedule.user_id}</td>
+									<td>{schedule.location_id ? 'Local' : 'Libro'}</td>
+									<td>{schedule.start_time}</td>
+									<td>{schedule.end_time}</td>
+									<td>{schedule.status}</td>
+									<td>{schedule.created_at}</td>
+									<td>
+										<button type="button" className="btn btn-secondary m-1">
+											<i className="fa-solid fa-pen"></i>
+										</button>
+										<button type="button" className="btn btn-secondary m-1">
+											<i className="fa-solid fa-trash"></i>
+										</button>
+										<button type="button" className="btn btn-primary m-1">
+											<i className="fa-solid fa-plus"></i>
+										</button>
 									</td>
 								</tr>
 							))}

@@ -6,7 +6,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			isAuthenticated: !!localStorage.getItem("token"),
 			books: [],
 			places: [],
-			users: []
+			users: [],
+			schedules: []
 		},
 		actions: {
 			// Función para registrar un usuario
@@ -89,7 +90,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/user`);
 					if (!response.ok) throw new Error("Error al obtener los usuarios");
-					console.log(response);
 					const data = await response.json();
 					setStore({ users: data });
 				} catch (error) {
@@ -122,8 +122,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al obtener lugares:", error);
 				}
 			},
+			getSchedules: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/schedule`);
+					if (!response.ok) throw new Error("Error al obtener reservas");
 
-			// Otros métodos de CRUD (ejemplo para libros)
+					const data = await response.json();
+					setStore({ schedules: data });
+				} catch (error) {
+					console.error("Error al obtener reservas:", error);
+				}
+			},
+			getUserSchedules: async (userID) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/schedule/user/${userID}`);
+					if (!response.ok) throw new Error("Error al obtener reservas del usuario");
+
+					const data = await response.json();
+					return data;
+				} catch (error) {
+					console.error(`Error al obtener reservas del usuario ${userID} : ${error}`);
+				}
+			},
+
+
+			// Metodos POST
 			addBook: async (title, author) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/book`, {
@@ -137,6 +160,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				} catch (error) {
 					console.error("Error al añadir libro:", error);
+				}
+			},
+			addPlace: async (name, address, capacity) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/place`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ name, address, capacity })
+					});
+					if (response.ok) {
+						alert("Local añadido exitosamente");
+						await getActions().getPlaces(); // Refrescar Locales
+					}
+				} catch (error) {
+					console.error("Error al añadir Local:", error);
+				}
+			},
+
+			addSchedule: async (start_time, end_time, status, created_at) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/place`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ start_time, end_time, status, created_at })
+					});
+					if (response.ok) {
+						alert("Reserva añadida exitosamente");
+						await getActions().getSchedules();
+					}
+				} catch (error) {
+					console.error("Error al añadir Local:", error);
 				}
 			},
 		},
