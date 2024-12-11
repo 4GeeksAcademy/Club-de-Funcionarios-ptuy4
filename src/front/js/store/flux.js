@@ -87,9 +87,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Obtener usuarios y actualizar el store
 			getUsers: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/user`);
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user`);
 					if (!response.ok) throw new Error("Error al obtener los usuarios");
-
+					console.log(response);
 					const data = await response.json();
 					setStore({ users: data });
 				} catch (error) {

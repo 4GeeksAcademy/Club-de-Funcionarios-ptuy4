@@ -88,7 +88,7 @@ export const AdminPage = () => {
 							{store.users.map((usuario, index) => (
 								<tr key={index}>
 									<th scope="row">{index + 1}</th>
-									<td>{usuario.name}</td>
+									<td>{usuario.full_name}</td>
 									<td>{usuario.email}</td>
 									<td>
 										<button type="button" className="btn btn-secondary m-1">
@@ -122,8 +122,8 @@ export const AdminPage = () => {
 							{store.books.map((libro, index) => (
 								<tr key={index}>
 									<th scope="row">{index + 1}</th>
-									<td>{libro.titulo}</td>
-									<td>{libro.autor}</td>
+									<td>{libro.title}</td>
+									<td>{libro.author}</td>
 									<td>
 										<button type="button" className="btn btn-secondary m-1">
 											<i className="fa-solid fa-pen"></i>
@@ -157,9 +157,9 @@ export const AdminPage = () => {
 							{store.places.map((local, index) => (
 								<tr key={index}>
 									<th scope="row">{index + 1}</th>
-									<td>{local.salon}</td>
-									<td>{local.capacidad}</td>
-									<td>{local.direccion}</td>
+									<td>{local.name}</td>
+									<td>{local.capacity}</td>
+									<td>{local.address}</td>
 									<td>
 										<button type="button" className="btn btn-secondary m-1">
 											<i className="fa-solid fa-pen"></i>
