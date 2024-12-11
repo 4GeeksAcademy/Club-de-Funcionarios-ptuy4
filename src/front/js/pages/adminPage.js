@@ -94,6 +94,7 @@ export const AdminPage = () => {
 								<th scope="col">#</th>
 								<th scope="col">Nombre completo</th>
 								<th scope="col">Email</th>
+								<th scope="col">Administrador</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -144,7 +145,7 @@ export const AdminPage = () => {
 										<button type="button" className="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#editBookModal" data-bs-whatever="@mdo">
 											<i className="fa-solid fa-pen"></i>
 										</button>
-										<div className="modal fade" id="editBookModal" tabindex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">
+										<div className="modal fade" id="editBookModal" tabIndex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
@@ -154,11 +155,11 @@ export const AdminPage = () => {
 													<div className="modal-body">
 														<form>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Titulo:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Titulo:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Autor:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Autor:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 														</form>
@@ -178,7 +179,7 @@ export const AdminPage = () => {
 										<button type="button" className="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#addBookModal" data-bs-whatever="@fat">
 											<i className="fa-solid fa-plus"></i>
 										</button>
-										<div className="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+										<div className="modal fade" id="addBookModal" tabIndex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
@@ -188,11 +189,11 @@ export const AdminPage = () => {
 													<div className="modal-body">
 														<form>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Titulo:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Titulo:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Autor:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Autor:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 														</form>
@@ -235,7 +236,7 @@ export const AdminPage = () => {
 										<button type="button" className="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="@mdo">
 											<i className="fa-solid fa-pen"></i>
 										</button>
-										<div className="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+										<div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
@@ -245,15 +246,15 @@ export const AdminPage = () => {
 													<div className="modal-body">
 														<form>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Nombre:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Nombre:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Capacidad:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Capacidad:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Dirección:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Dirección:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 														</form>
@@ -273,7 +274,7 @@ export const AdminPage = () => {
 										<button type="button" className="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#addModal" data-bs-whatever="@fat">
 											<i className="fa-solid fa-plus"></i>
 										</button>
-										<div className="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+										<div className="modal fade" id="addModal" tabIndex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
@@ -283,15 +284,15 @@ export const AdminPage = () => {
 													<div className="modal-body">
 														<form>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Nombre:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Nombre:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Capacidad:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Capacidad:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 															<div className="mb-3">
-																<label for="recipient-name" className="col-form-label">Dirección:</label>
+																<label htmlFor="recipient-name" className="col-form-label">Dirección:</label>
 																<input type="text" className="form-control" id="recipient-name"/>
 															</div>
 														</form>

@@ -55,14 +55,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const headers = new Headers({ "Content-Type": "application/json" });
 
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+					const response = await fetch(`${process.env.BACKEND_URL}api/login`, {
 						method: "POST",
 						headers,
 						body: JSON.stringify({ email, password })
 					});
 
 					const data = await response.json();
-
 					if (response.ok && data.token && data.user) {
 						localStorage.setItem("token", data.token);
 						localStorage.setItem("user", JSON.stringify(data.user));
@@ -88,7 +87,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Obtener usuarios y actualizar el store
 			getUsers: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/user`);
+					const response = await fetch(`${process.env.BACKEND_URL}api/user`);
 					if (!response.ok) throw new Error("Error al obtener los usuarios");
 					const data = await response.json();
 					setStore({ users: data });
@@ -100,7 +99,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Obtener libros y actualizar el store
 			getBooks: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/book`);
+					const response = await fetch(`${process.env.BACKEND_URL}api/book`);
 					if (!response.ok) throw new Error("Error al obtener libros");
 
 					const data = await response.json();
@@ -113,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Obtener lugares y actualizar el store
 			getPlaces: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/place`);
+					const response = await fetch(`${process.env.BACKEND_URL}api/place`);
 					if (!response.ok) throw new Error("Error al obtener lugares");
 
 					const data = await response.json();
@@ -124,7 +123,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getSchedules: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/schedule`);
+					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`);
 					if (!response.ok) throw new Error("Error al obtener reservas");
 
 					const data = await response.json();
@@ -135,7 +134,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getUserSchedules: async (userID) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/schedule/user/${userID}`);
+					const response = await fetch(`${process.env.BACKEND_URL}api/schedule/user/${userID}`);
 					if (!response.ok) throw new Error("Error al obtener reservas del usuario");
 
 					const data = await response.json();
@@ -149,7 +148,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Metodos POST
 			addBook: async (title, author) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/book`, {
+					const response = await fetch(`${process.env.BACKEND_URL}api/book`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ title, author })
@@ -164,7 +163,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			addPlace: async (name, address, capacity) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/place`, {
+					const response = await fetch(`${process.env.BACKEND_URL}api/place`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ name, address, capacity })
@@ -180,7 +179,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			addSchedule: async (start_time, end_time, status, created_at) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/place`, {
+					const response = await fetch(`${process.env.BACKEND_URL}api/place`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ start_time, end_time, status, created_at })

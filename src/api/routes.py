@@ -299,10 +299,21 @@ def get_schedule(id):
 
 @api.route('/schedule/user/<int:user_id>', methods=['GET'])
 def get_schedules_by_user(user_id):
-    schedules = Schedule.query.filter_by(user_id=user_id).all()
+    schedules = (
+        db.session.query(
+            Schedule,
+            Book.title.label("book_title"),
+            Location.name.label("location_name")
+        )
+        .outerjoin(Book, Schedule.book_id == Book.book_id)
+        .outerjoin(Location, Schedule.location_id == Location.location_id)
+        .filter(Schedule.user_id == user_id)
+        .all()
+    )
+
     if schedules:
         results = []
-        for schedule in schedules:
+        for schedule, book_title, location_name in schedules:
             results.append({
                 "schedule_id": schedule.schedule_id,
                 "user_id": schedule.user_id,
@@ -312,9 +323,13 @@ def get_schedules_by_user(user_id):
                 "end_time": schedule.end_time.isoformat(),
                 "status": schedule.status,
                 "created_at": schedule.created_at.isoformat(),
+                "book_title": book_title,
+                "location_name": location_name,
             })
         return jsonify(results), 200
+
     return jsonify({"error": "No schedules found for this user"}), 404
+
 
 
 @api.route('/schedule', methods=['POST'])
@@ -408,7 +423,7 @@ def login():
     return jsonify ({
         "token": access_token,
         "user": {
-            "user_id": user.user_id,
+            "id": user.user_id,
             "email": user.email,
             "name": user.full_name,
             "is_admin": user.is_admin

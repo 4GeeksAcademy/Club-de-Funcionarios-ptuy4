@@ -1,17 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
-const reservations = [];
-
 export const MyReservations = () => {
   const { store, actions } = useContext(Context);
+  const [reservations, setReservations] = useState([]); // Estado para las reservas
   const [showModal, setShowModal] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState(null);
 
   useEffect(() => {
-		reservations = actions.getUserSchedule(store.user.user_id);
-	}, []);
+    const fetchReservations = async () => {
+      const userReservations = await actions.getUserSchedules(store.user.id);
+      setReservations(Array.isArray(userReservations) ? userReservations : []);
+    };
+
+    fetchReservations();
+  }, [actions, store.user.user_id]);
 
   const handleCancel = (id) => {
     setSelectedReservation(id);
@@ -20,6 +24,7 @@ export const MyReservations = () => {
 
   const confirmCancel = () => {
     console.log(`Reserva con ID ${selectedReservation} cancelada`);
+    setReservations(reservations.filter((res) => res.id !== selectedReservation));
     setShowModal(false);
   };
 
@@ -48,7 +53,7 @@ export const MyReservations = () => {
             borderRadius: "10px",
             padding: "30px",
             overflowY: "auto",
-            maxHeight: "100vh"
+            maxHeight: "100vh",
           }}
         >
           <h1 className="mb-4">Mis Reservas</h1>
@@ -56,9 +61,9 @@ export const MyReservations = () => {
           {reservations.length === 0 ? (
             <p className="text-center">No tienes reservas actualmente.</p>
           ) : (
-            reservations.map((reservation) => (
+            reservations.map((reservation, index) => (
               <div
-                key={reservation.id}
+                key={index}
                 className="card mb-3 w-100"
                 style={{
                   backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -68,20 +73,20 @@ export const MyReservations = () => {
                 }}
               >
                 <div className="card-body text-center">
-                  <h5 className="card-title">{reservation.type}</h5>
-                  {reservation.type === "Biblioteca" ? (
+                  {reservation.book_id ? (
                     <p>
-                      <strong>Libros reservados:</strong>{" "}
-                      {reservation.items.join(", ")}
+                      <strong>Libro reservado:</strong>{" "}
+                      {reservation.book_title}
                     </p>
                   ) : (
                     <p>
-                      <strong>Local reservado:</strong> {reservation.venue}
+                      <strong>Local reservado:</strong>{" "}
+                      {reservation.location_name}
                     </p>
                   )}
                   <p>
-                    <strong>Fechas:</strong> {reservation.startDate} -{" "}
-                    {reservation.endDate}
+                    <strong>Fechas:</strong> {reservation.start_time} -{" "}
+                    {reservation.end_time}
                   </p>
                   <button
                     className="btn btn-danger mt-2"
@@ -100,46 +105,50 @@ export const MyReservations = () => {
         </div>
       </div>
 
-{/* Modal */}
-{showModal && selectedReservation && (
-  <div
-    className="modal d-block"
-    style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-  >
-    <div className="modal-dialog">
-      <div className="modal-content" style={{ color: "black" }}>
-        <div className="modal-header">
-          <h5 className="modal-title">Confirmar Cancelación</h5>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => setShowModal(false)}
-          ></button>
+      {/* Modal */}
+      {showModal && selectedReservation && (
+        <div
+          className="modal d-block"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog">
+            <div className="modal-content" style={{ color: "black" }}>
+              <div className="modal-header">
+                <h5 className="modal-title">Confirmar Cancelación</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  ¿Estás seguro de que deseas cancelar la reserva de{" "}
+                  <strong>
+                    {
+                      reservations.find(
+                        (res) => res.id === selectedReservation
+                      ).type
+                    }
+                  </strong>
+                  ?
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cerrar
+                </button>
+                <button className="btn btn-danger" onClick={confirmCancel}>
+                  Cancelar Reserva
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="modal-body">
-          <p>
-            ¿Estás seguro de que deseas cancelar la reserva de{" "}
-            <strong>
-              {reservations.find((res) => res.id === selectedReservation).type}
-            </strong>
-            ?
-          </p>
-        </div>
-        <div className="modal-footer">
-          <button
-            className="btn btn-secondary"
-            onClick={() => setShowModal(false)}
-          >
-            Cerrar
-          </button>
-          <button className="btn btn-danger" onClick={confirmCancel}>
-            Cancelar Reserva
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };
