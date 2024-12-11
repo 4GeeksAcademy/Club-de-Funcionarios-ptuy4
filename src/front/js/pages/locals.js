@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Asegúrate de importar Link
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -53,6 +54,12 @@ const Locals = () => {
             moveRangeOnFirstSelection={false}
             editableDateInputs={true}
           />
+          {/* Botón de Volver a Inicio */}
+          <div className="mt-4">
+            <Link to="/userLogin">
+              <button className="btn btn-secondary">Volver a Inicio</button>
+            </Link>
+          </div>
         </div>
 
         {/* Columna de información */}

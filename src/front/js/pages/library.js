@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Importar Link
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { es } from 'date-fns/locale';
+import { es } from "date-fns/locale";
 import "../../styles/index.css";
 import { Context } from "../store/appContext";
 
@@ -28,9 +29,7 @@ const Library = () => {
     console.log(ranges);
   };
 
-  // Libros disponibles para la búsqueda
   const availableBooks = store.books;
-  console.log(availableBooks)
 
   const handleSearch = () => {
     const results = availableBooks.filter(
@@ -42,13 +41,11 @@ const Library = () => {
   };
 
   const handleSelectBook = (book) => {
-    // Limitar a 3 libros seleccionados
     if (selectedBooks.length >= 3) {
       alert("Solo puedes seleccionar un máximo de 3 libros.");
       return;
     }
 
-    // Evitar seleccionar un libro repetido
     if (!selectedBooks.find((b) => b.title === book.title)) {
       setSelectedBooks([...selectedBooks, book]);
     }
@@ -60,20 +57,17 @@ const Library = () => {
   };
 
   const handleReservation = () => {
-    // Validación del rango de fechas
     if (!selectionRange.startDate || !selectionRange.endDate) {
       setErrorMessage("Por favor, selecciona un rango de fechas para reservar.");
       return;
     }
 
-    // Validación de libros seleccionados
     if (selectedBooks.length === 0) {
       setErrorMessage("Por favor, selecciona al menos un libro para reservar.");
       return;
     }
 
-    // Si no hay errores, hacer la reserva
-    setErrorMessage(""); // Limpiar el mensaje de error
+    setErrorMessage("");
 
     alert("Reserva realizada con éxito");
   };
@@ -91,7 +85,7 @@ const Library = () => {
       <div className="row w-100 h-100 m-0">
         {/* Sección izquierda: Calendario */}
         <div
-          className="col-5 d-flex justify-content-center align-items-center position-relative"
+          className="col-5 d-flex flex-column justify-content-center align-items-center position-relative"
           style={{
             backgroundColor: "rgba(0, 0, 0, 0.2)",
           }}
@@ -126,6 +120,12 @@ const Library = () => {
               moveRangeOnFirstSelection={false}
               editableDateInputs={true}
             />
+            {/* Botón de Volver a Inicio */}
+            <div className="mt-4">
+              <Link to="/userLogin">
+                <button className="btn btn-secondary">Volver a Inicio</button>
+              </Link>
+            </div>
           </div>
         </div>
         {/* Sección derecha: Búsqueda y selección */}
