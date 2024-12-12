@@ -340,14 +340,15 @@ def add_schedule():
     location_id = data.get('location_id')
     start_time = data.get('start_time')
     end_time = data.get('end_time')
+    status = data.get('status')
 
     if not user_id or not start_time or not end_time:
         return jsonify({"error": "Missing required fields"}), 400
 
     from datetime import datetime
     try:
-        start_time = datetime.fromisoformat(start_time)
-        end_time = datetime.fromisoformat(end_time)
+        start_time = datetime.fromisoformat(start_time.replace("Z", ""))
+        end_time = datetime.fromisoformat(end_time.replace("Z", ""))
     except ValueError:
         return jsonify({"error": "Invalid date format"}), 400
 
@@ -357,7 +358,7 @@ def add_schedule():
         location_id=location_id,
         start_time=start_time,
         end_time=end_time,
-        status=data.get('status', "pending"),
+        status=status,
     )
     db.session.add(new_schedule)
     db.session.commit()

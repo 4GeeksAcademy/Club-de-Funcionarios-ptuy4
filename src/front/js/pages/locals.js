@@ -19,9 +19,9 @@ const Locals = () => {
     actions.getPlaces();
   }, []);
 
-  const availableBooks = store.places;
+  const availablePlaces = store.places;
 
-  const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);

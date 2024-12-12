@@ -26,7 +26,6 @@ const Library = () => {
 
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);
-    console.log(ranges);
   };
 
   const availableBooks = store.books;
@@ -66,6 +65,30 @@ const Library = () => {
       setErrorMessage("Por favor, selecciona al menos un libro para reservar.");
       return;
     }
+
+    let reservationObjects = []
+    selectedBooks.map((book, index) => {
+      let reservation = {
+        user_id: store.user.id,
+        book_id: book.book_id,
+        location_id: null,
+        start_time: selectionRange.startDate.toISOString(),
+        end_time: selectionRange.endDate.toISOString(),
+        status: "reservado"
+      };
+      reservationObjects.push(reservation);
+    });
+
+    try {
+      reservationObjects.map((reservation) => {
+        actions.addSchedule(reservation);
+      });
+      alert("Se ha realizado la reserva correctamente")
+    } catch (error) {
+      alert("Error al crear la reserva")
+      console.error(error);
+    }
+
 
     setErrorMessage("");
 

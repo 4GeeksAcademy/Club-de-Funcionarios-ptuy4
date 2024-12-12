@@ -48,7 +48,7 @@ class Schedule(db.Model):
     location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable=True)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.String(50), default="pending")
+    status = db.Column(db.String(50), default="no status")
     created_at = db.Column(db.DateTime, default=db.func.now())
 
     # Relationships

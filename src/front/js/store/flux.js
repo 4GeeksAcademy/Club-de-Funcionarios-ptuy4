@@ -155,7 +155,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					if (response.ok) {
 						alert("Libro añadido exitosamente");
-						await getActions().getBooks(); // Refrescar libros
+						await getActions().getBooks();
 					}
 				} catch (error) {
 					console.error("Error al añadir libro:", error);
@@ -177,19 +177,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			addSchedule: async (start_time, end_time, status, created_at) => {
+			addSchedule: async (reserv) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/place`, {
+					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ start_time, end_time, status, created_at })
+						body: JSON.stringify({
+							user_id: reserv.user_id,
+							book_id: reserv.book_id,
+							location_id: reserv.location_id,
+							start_time: reserv.start_time,
+							end_time: reserv.end_time,
+							status: reserv.status
+						})
 					});
+					let resp = await response.json();
+					console.log(resp)
 					if (response.ok) {
-						alert("Reserva añadida exitosamente");
 						await getActions().getSchedules();
+						return true
 					}
 				} catch (error) {
-					console.error("Error al añadir Local:", error);
+					console.error("Error al añadir reserva:", error);
 				}
 			},
 		},
