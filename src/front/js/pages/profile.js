@@ -51,6 +51,12 @@ export const Profile = () => {
           </div>
         </div>
       </div>
+      {/* Botón de Volver a Inicio */}
+        <div className="mt-4 container-fluid d-flex align-items-center justify-content-center">
+          <Link to="/userLogin">
+            <button className="btn btn-secondary">Volver a Inicio</button>
+          </Link>
+        </div>
     </div>
   )
 }
