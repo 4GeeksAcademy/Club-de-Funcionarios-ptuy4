@@ -9,6 +9,7 @@ import { Context } from "../store/appContext";
 
 const Locals = () => {
   const { store, actions } = useContext(Context);
+  const [filteredPlace, setFilteredPlace] = useState([]);
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -25,6 +26,16 @@ const Locals = () => {
 
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);
+  };
+
+  
+  const handleSearch = () => {
+    const results = availablePlaces.filter(
+      (place) =>
+        place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        place.address.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredPlace(results);
   };
 
   return (
@@ -75,30 +86,45 @@ const Locals = () => {
             />
             <button
               className="btn btn-primary"
-              onClick={() => console.log("Buscando:", searchQuery)}
+              onClick={handleSearch}
             >
               Buscar
             </button>
           </div>
 
           {/* Información del local (reemplazar lista dinámica) */}
-          <div className="d-flex flex-column flex-md-row align-items-center">
-            <img
-              alt="Un lugar bellamente decorado para eventos"
-              className="img-fluid rounded-lg mb-4 mb-md-0 me-md-4"
-              src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1798&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              style={{ width: "300px", height: "200px" }}
-            />
-            <div>
-              <h2 className="text-2xl fw-bold mb-2">LOCAL 1</h2>
-              <p className="text-gray-700 mb-1">
-                Dirección: Arenal Grande 1570, Montevideo.
-              </p>
-              <p className="text-gray-700 mb-1">Capacidad: 100 personas.</p>
-              <p className="text-gray-700 mb-4">Disponible: Sí/No</p>
-              <button className="btn btn-success px-4 py-2">Reservar</button>
+          
+          {filteredPlace.length > 0 && (
+            <div className="search-results mb-4">
+              <h5>Resultados de búsqueda:</h5>
+              <ul className="list-group">
+                {filteredPlace.map((place, index) => (
+                 <li
+                 key={index}
+                 className="list-group-item d-flex justify-content-between align-items-center"
+               >
+               
+                 <div className="d-flex">
+                   <img 
+                     src={place.image_url} 
+                     alt={`Imagen de ${place.name}`} 
+                     width="150" 
+                     className="me-3" 
+                   />
+                   <div>
+                     <div className="fs-4 fw-bold">{place.name}</div>
+                     <div>Capacidad: {place.capacity}</div>
+                     <div>Dirección: {place.address}</div>
+                   </div>
+                 </div>
+               
+               
+                 <button className="btn btn-success">Reservar</button>
+               </li>
+                ))}
+              </ul>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

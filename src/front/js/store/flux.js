@@ -225,7 +225,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							(reservation) => reservation.user_id === reserv.user_id && reservation.book_id === reserv.book_id
 						);
 						
-						if (userReservations.length >= 3) {
+						if (userReservations.length > 3) {
 							console.log("El usuario no puede realizar más de 3 reservas para este libro.");
 							return false;
 						}
