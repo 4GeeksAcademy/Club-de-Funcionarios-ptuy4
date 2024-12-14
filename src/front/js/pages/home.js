@@ -1,7 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 export const Home = () => {
+
+
+  const navigate = useNavigate();
+  const { store } = useContext(Context); // Obtenemos el estado global, donde guardamos el token
+  const token = store.token || localStorage.getItem("token"); // Revisamos el token
+
+  
+  useEffect(() => {
+    if (token) {
+      navigate("/userLogin"); // Redirige a la página de userLogin
+    }
+  }, [token, navigate]);
+
   return (
     <div
       className="container-fluid position-relative"

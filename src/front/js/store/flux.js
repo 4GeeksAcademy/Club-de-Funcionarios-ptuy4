@@ -186,21 +186,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 					// Comprobar si el ítem está libre considerando book_id o location_id
 					const isItemFree = (item_id, isBook, start_date, end_date, reservations, status) => {
-						// Formatear las fechas a día, mes y año
 						const formatDate = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 						const startDate = formatDate(new Date(start_date));
 						const endDate = formatDate(new Date(end_date));
 			
 						for (const reserva of reservations) {
-							// Detectar si es una reserva de libro o ubicación
 							const reservaItemId = isBook ? reserva.book_id : reserva.location_id;
 			
-							// Si el id coincide, verificar solapamiento
 							if (reservaItemId === item_id) {
 								const reservaInicio = formatDate(new Date(reserva.start_time));
 								const reservaFin = formatDate(new Date(reserva.end_time));
 			
-								// Si el estado es cancelado, permitir solapamiento
 								if (reserva.status !== "cancelado" && !(startDate > reservaFin || endDate < reservaInicio)) {
 									return false; // no está disponible
 								}
@@ -216,8 +212,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const endDate = new Date(reserv.end_time);
 			
 					if (startDate < today || endDate < today) {
-						console.log("La fecha seleccionada no puede ser anterior a hoy");
-						return false;
+						return { error: "La fecha seleccionada no puede ser anterior a hoy" };
 					}
 			
 					// Verificar si el usuario ya tiene 3 reservas para el mismo libro
@@ -227,8 +222,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						);
 						
 						if (userReservations.length > 3) {
-							console.log("El usuario no puede realizar más de 3 reservas para este libro.");
-							return false;
+							return { error: "El usuario no puede realizar más de 3 reservas para este libro." };
 						}
 					}
 			
@@ -240,8 +234,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const available = isItemFree(itemId, isBook, reserv.start_time, reserv.end_time, reservations, reserv.status);
 			
 					if (!available) {
-						console.log("El ítem no está disponible en las fechas seleccionadas");
-						return false;
+						return { error: "El ítem no está disponible en las fechas seleccionadas" };
 					}
 			
 					// Realizar la reserva si está disponible
@@ -259,18 +252,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			
 					const resp = await response.json();
-					console.log(resp);
-			
+					
 					if (response.ok) {
-						await getActions().getSchedules();
-						return true; // Reserva realizada exitosamente
+						// Actualizar el store con las nuevas reservas
+						const getActions = getActions();
+						await getActions().getSchedules(); // Llamada para obtener la lista actualizada de reservas
+						return { success: true }; // Reserva realizada exitosamente
+					} else {
+						return { error: "Error al realizar la reserva" };
 					}
 			
 				} catch (error) {
 					console.error("Error al añadir reserva:", error);
-					return false; // En caso de error
+					return { error: "Hubo un problema al procesar la reserva." };
 				}
 			},
+			
+			
 			
 			
 			

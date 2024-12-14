@@ -36,16 +36,16 @@ const Layout = () => {
                     <Route element={<Home />} path="/" />
                     {/* <Route element={<Demo />} path="/demo" />*/}
                     <Route element={<Register />} path="/register" />
-                    {/*<Route element={<Single />} path="/single/:theid" />*/}
+                    <Route element={<Single />} path="/single/:theid" />*/}
                     <Route element={<RecoverPassword />} path="/recoverPassword" />
                                         
                     {/* Ruta protegida con ProtectedRoute */}
-                    <Route path="/userLogin" element={<ProtectedRoute> <UserLogin /> </ProtectedRoute>}/>
-                    <Route path="/adminPage" element={<ProtectedRoute> <AdminPage /> </ProtectedRoute>}/>
-                    <Route path="/library" element={<ProtectedRoute> <Library /> </ProtectedRoute>}/>
-                    <Route path="/locals" element={<ProtectedRoute> <Locals /> </ProtectedRoute>}/>
-                    <Route path="/myReservations" element={<ProtectedRoute> <MyReservations /> </ProtectedRoute>}/>
-                    <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>}/>
+                    <Route path="/userLogin" element={<ProtectedRoute isAdminRequired={false}> <UserLogin /> </ProtectedRoute>}/>
+                    <Route path="/adminPage" element={<ProtectedRoute isAdminRequired={true}> <AdminPage /> </ProtectedRoute>}/>
+                    <Route path="/library" element={<ProtectedRoute isAdminRequired={false}> <Library /> </ProtectedRoute>}/>
+                    <Route path="/locals" element={<ProtectedRoute isAdminRequired={false}> <Locals /> </ProtectedRoute>}/>
+                    <Route path="/myReservations" element={<ProtectedRoute isAdminRequired={false}> <MyReservations /> </ProtectedRoute>}/>
+                    <Route path="/profile" element={<ProtectedRoute isAdminRequired={false}> <Profile /> </ProtectedRoute>}/>
 
                     {/* Ruta para páginas no encontradas */}
                     <Route element={<h1>Not found!</h1>} path="*" />
