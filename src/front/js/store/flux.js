@@ -186,21 +186,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 					// Comprobar si el ítem está libre considerando book_id o location_id
 					const isItemFree = (item_id, isBook, start_date, end_date, reservations, status) => {
-						// Formatear las fechas a día, mes y año
 						const formatDate = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 						const startDate = formatDate(new Date(start_date));
 						const endDate = formatDate(new Date(end_date));
 			
 						for (const reserva of reservations) {
-							// Detectar si es una reserva de libro o ubicación
 							const reservaItemId = isBook ? reserva.book_id : reserva.location_id;
-			
-							// Si el id coincide, verificar solapamiento
 							if (reservaItemId === item_id) {
 								const reservaInicio = formatDate(new Date(reserva.start_time));
 								const reservaFin = formatDate(new Date(reserva.end_time));
 			
-								// Si el estado es cancelado, permitir solapamiento
 								if (reserva.status !== "cancelado" && !(startDate > reservaFin || endDate < reservaInicio)) {
 									return false; // no está disponible
 								}
@@ -219,14 +214,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return { error: "La fecha seleccionada no puede ser anterior a hoy." };
 					}
 			
-					// Verificar si el usuario ya tiene 3 reservas para el mismo libro
+					// Verificar si el usuario ya tiene 3 reservas activas de libros
 					if (reserv.book_id !== null) {
-						const userReservations = reservations.filter(
-							(reservation) => reservation.user_id === reserv.user_id && reservation.book_id === reserv.book_id
+						const activeBookReservations = reservations.filter(
+							(reservation) => reservation.user_id === reserv.user_id && reservation.book_id !== null && reservation.status === "reservado"
 						);
 			
-						if (userReservations.length >= 3) {
-							return { error: "El usuario no puede realizar más de 3 reservas para este libro." };
+						if (activeBookReservations.length >= 3) {
+							return { error: "El usuario no puede realizar más de 3 reservas de libros." };
 						}
 					}
 			
@@ -258,18 +253,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await response.json();
 			
 					if (response.ok) {
-						await getActions().getSchedules();
-						return { success: true }; // Reserva realizada exitosamente
+						await getActions().getSchedules(); // Actualiza el store llamando a la acción
+						return { success: "Reserva realizada exitosamente." };
 					} else {
 						return { error: "Error al realizar la reserva. Intenta nuevamente." };
 					}
+			
 				} catch (error) {
 					console.error("Error al añadir reserva:", error);
 					return { error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
 				}
 			},
-			
-			
 			
 			
 		},
