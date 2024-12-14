@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 export const AdminPage = () => {
 	const { store, actions } = useContext(Context);
@@ -25,7 +26,7 @@ export const AdminPage = () => {
 	const handleUpdateBook = (book, index) => {
 		const title = document.getElementById(`update-book-title${index}`);
 		const author = document.getElementById(`update-book-author${index}`);
-		
+
 		const updatedBook = {
 			"book_id": book.book_id,
 			title,
@@ -34,8 +35,31 @@ export const AdminPage = () => {
 		actions.updateBook(updatedBook);
 	}
 
-	const handleCreateBook = () => {
-		console.log()
+	const handleCreateBook = (index) => {
+		const title = document.getElementById(`create-book-title-${index}`).value;
+		const author = document.getElementById(`create-book-author-${index}`).value;
+		actions.addBook(title, author);
+	}
+
+	const handleDeleteBook = (book_id) => {
+		Swal.fire({
+			title: "¿Estás seguro?",
+			text: "Este libro pasará a dejar de estar disponible",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Si, hazlo!"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				actions.deleteBook(book_id);
+				Swal.fire({
+					title: "Hecho!",
+					text: "Este libro ya no está disponible.",
+					icon: "success"
+				});
+			}
+		});
 	}
 
 	return (
@@ -197,6 +221,7 @@ export const AdminPage = () => {
 								<th scope="col">#</th>
 								<th scope="col">Titulo</th>
 								<th scope="col">Autor</th>
+								<th scope="col">Disponible</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -206,6 +231,7 @@ export const AdminPage = () => {
 									<th scope="row">{index + 1}</th>
 									<td>{libro.title}</td>
 									<td>{libro.author}</td>
+									<td>{libro.is_active ? 'Sí' : 'No'}</td>
 									<td>
 
 										{/* EDITAR LIBRO */}
@@ -262,35 +288,59 @@ export const AdminPage = () => {
 											</div>
 										</div>
 										{/* BORRAR LIBRO */}
-										<button type="button" className="btn btn-danger m-1">
+										<button type="button" className="btn btn-danger m-1" onClick={() => handleDeleteBook(libro.book_id)}>
 											<i className="fa-solid fa-trash"></i>
 										</button>
+
 										{/* AGREGAR LIBRO */}
-										<button type="button" className="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#addBookModal" data-bs-whatever="@fat">
+										<button
+											type="button"
+											className="btn btn-primary m-1"
+											data-bs-toggle="modal"
+											data-bs-target={`#addBookModal-${index}`}
+										>
 											<i className="fa-solid fa-plus"></i>
 										</button>
-										<div className="modal fade" id="addBookModal" tabIndex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+
+										<div
+											className="modal fade"
+											id={`addBookModal-${index}`}
+											tabIndex="-1"
+											aria-labelledby={`addBookModalLabel-${index}`}
+											aria-hidden="true"
+										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
-														<h1 className="modal-title fs-5" id="addBookModalLabel">Agregar libro</h1>
+														<h1 className="modal-title fs-5" id={`addBookModalLabel-${index}`}>
+															Crear Libro
+														</h1>
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div className="modal-body">
 														<form>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Titulo:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Titulo:</label>
+																<input type="text" className="form-control" id={`create-book-title-${index}`} />
 															</div>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Autor:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Autor:</label>
+																<input type="text" className="form-control" id={`create-book-author-${index}`} />
 															</div>
 														</form>
 													</div>
 													<div className="modal-footer">
-														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-														<button type="button" className="btn btn-primary" onClick={() => handleCreateBook()}>Agregar</button>
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+															Cerrar
+														</button>
+														<button
+															type="button"
+															className="btn btn-primary"
+															data-bs-dismiss="modal"
+															onClick={() => handleCreateBook(libro, index)}
+														>
+															Confirmar
+														</button>
 													</div>
 												</div>
 											</div>
@@ -311,6 +361,7 @@ export const AdminPage = () => {
 								<th scope="col">Salón</th>
 								<th scope="col">Capacidad</th>
 								<th scope="col">Dirección</th>
+								<th scope="col">Activo</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -321,75 +372,131 @@ export const AdminPage = () => {
 									<td>{local.name}</td>
 									<td>{local.capacity}</td>
 									<td>{local.address}</td>
+									<td>{local.is_active ? "Si" : "No"}</td>
 									<td>
 										{/* EDITAR LOCAL */}
-										<button type="button" className="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="@mdo">
+										<button
+											type="button"
+											className="btn btn-success m-1"
+											data-bs-toggle="modal"
+											data-bs-target={`#editPlaceModal-${index}`}
+										>
 											<i className="fa-solid fa-pen"></i>
 										</button>
-										<div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+
+										<div
+											className="modal fade"
+											id={`editPlaceModal-${index}`}
+											tabIndex="-1"
+											aria-labelledby={`editPlaceModalLabel-${index}`}
+											aria-hidden="true"
+										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
-														<h1 className="modal-title fs-5" id="editModalLabel">Editar libro</h1>
+														<h1 className="modal-title fs-5" id={`editPlaceModalLabel-${index}`}>
+															Editar local
+														</h1>
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div className="modal-body">
+														<p>Puedes dejar vacíos los campos que no quieras actualizar</p>
 														<form>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Nombre:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Nombre:</label>
+																<input type="text" className="form-control" id={`create-place-name-${index}`} />
 															</div>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Capacidad:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Capacidad:</label>
+																<input type="text" className="form-control" id={`create-place-capacity-${index}`} />
 															</div>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Dirección:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Dirección:</label>
+																<input type="text" className="form-control" id={`create-place-address-${index}`} />
+															</div>
+															<div className="mb-3">
+																<label className="col-form-label">Foto del local:</label>
+																<input type="file" className="form-control" id={`create-place-img-${index}`} />
 															</div>
 														</form>
 													</div>
 													<div className="modal-footer">
-														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-														<button type="button" className="btn btn-primary">Confirmar</button>
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+															Cerrar
+														</button>
+														<button
+															type="button"
+															className="btn btn-primary"
+															data-bs-dismiss="modal"
+															onClick={() => handleUpdatePlace(local, index)}
+														>
+															Confirmar
+														</button>
 													</div>
 												</div>
 											</div>
 										</div>
 										{/* BORRAR LOCAL */}
-										<button type="button" className="btn btn-danger m-1">
+										<button type="button" className="btn btn-danger m-1" onClick={() => handleDeletePlace(libro.book_id)}>
 											<i className="fa-solid fa-trash"></i>
 										</button>
 										{/* AGREGAR LOCAL */}
-										<button type="button" className="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#addModal" data-bs-whatever="@fat">
+										<button
+											type="button"
+											className="btn btn-primary m-1"
+											data-bs-toggle="modal"
+											data-bs-target={`#editPlaceModal-${index}`}
+										>
 											<i className="fa-solid fa-plus"></i>
 										</button>
-										<div className="modal fade" id="addModal" tabIndex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+
+										<div
+											className="modal fade"
+											id={`createPlaceModal-${index}`}
+											tabIndex="-1"
+											aria-labelledby={`createPlaceModalLabel-${index}`}
+											aria-hidden="true"
+										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
-														<h1 className="modal-title fs-5" id="addModalLabel">Agregar local</h1>
+														<h1 className="modal-title fs-5" id={`createPlaceModalLabel-${index}`}>
+															Crear local
+														</h1>
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div className="modal-body">
 														<form>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Nombre:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Nombre:</label>
+																<input type="text" className="form-control" id={`edit-place-name-${index}`} />
 															</div>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Capacidad:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Capacidad:</label>
+																<input type="text" className="form-control" id={`edit-place-capacity-${index}`} />
 															</div>
 															<div className="mb-3">
-																<label htmlFor="recipient-name" className="col-form-label">Dirección:</label>
-																<input type="text" className="form-control" id="recipient-name" />
+																<label className="col-form-label">Dirección:</label>
+																<input type="text" className="form-control" id={`edit-place-address-${index}`} />
+															</div>
+															<div className="mb-3">
+																<label className="col-form-label">Foto del local:</label>
+																<input type="file" className="form-control" id={`edit-place-img-${index}`} />
 															</div>
 														</form>
 													</div>
 													<div className="modal-footer">
-														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-														<button type="button" className="btn btn-primary">Agregar</button>
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+															Cerrar
+														</button>
+														<button
+															type="button"
+															className="btn btn-primary"
+															data-bs-dismiss="modal"
+															onClick={() => handleUpdatePlace(local, index)}
+														>
+															Confirmar
+														</button>
 													</div>
 												</div>
 											</div>
@@ -437,27 +544,27 @@ export const AdminPage = () => {
 
 										<div
 											className="modal fade"
-											id={`editScheduleModal-${index}`}
+											id={`editUserModal-${index}`}
 											tabIndex="-1"
-											aria-labelledby={`editScheduleModalLabel-${index}`}
+											aria-labelledby={`editUserModalLabel-${index}`}
 											aria-hidden="true"
 										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
-														<h1 className="modal-title fs-5" id={`editScheduleModalLabel-${index}`}>
-															Editar Reserva
+														<h1 className="modal-title fs-5" id={`editUserModalLabel-${index}`}>
+															Editar Usuario
 														</h1>
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div className="modal-body">
 														<form>
 															<div className="form-check">
-																<label htmlFor={`selectSchedule-${index}`} className="form-check-label">
+																<label className="form-check-label">
 																	Seleccione el nuevo estado de reserva
 																</label>
-																<select class="form-select" id={`selectSchedule-${index}`}>
-																	<option selected>Seleccione uno</option>
+																<select className="form-select" id={`selectSchedule-${index}`} aria-label="Seleccione el estado del horario">
+																	<option value="" disabled selected>Seleccione uno</option>
 																	<option value="Reservado">Reservado</option>
 																	<option value="Cancelado">Cancelado</option>
 																	<option value="Terminado">Terminado</option>
@@ -473,7 +580,7 @@ export const AdminPage = () => {
 															type="button"
 															className="btn btn-primary"
 															data-bs-dismiss="modal"
-															onClick={() => handleMakeUserAdmin(usuario)}
+															onClick={() => handleMakeUserAdmin(usuario, index)}
 														>
 															Confirmar
 														</button>

@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2'
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -24,7 +26,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await response.json();
 
 					if (response.ok) {
-						alert("Usuario registrado exitosamente");
+						Swal.fire({
+							title: "Registro",
+							text: "Usuario creado con éxito!",
+							icon: "success"
+						  });
 						// Datos para el correo
 						const emailData = {
 							to: email,
@@ -41,7 +47,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 						return true;
 					} else {
-						alert(data.msg || "Error al registrar usuario");
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: "Error al registrar el usuario",
+							footer: data.msg
+						  });
 						return false;
 					}
 				} catch (error) {
@@ -68,7 +79,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ token: data.token, user: data.user, isAuthenticated: true });
 						return true;
 					} else {
-						alert(data.msg || "Error en el inicio de sesión");
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: "Error al iniciar sesión",
+							footer: data.msg
+						  });
 						return false;
 					}
 				} catch (error) {
@@ -154,7 +170,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({ title, author })
 					});
 					if (response.ok) {
-						alert("Libro añadido exitosamente");
+						Swal.fire({
+							title: "Libro",
+							text: "Libro creado con éxito!",
+							icon: "success"
+						  });
 						await getActions().getBooks();
 					}
 				} catch (error) {
@@ -169,7 +189,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({ name, address, capacity })
 					});
 					if (response.ok) {
-						alert("Local añadido exitosamente");
+						Swal.fire({
+							title: "Local",
+							text: "Local creado con éxito!",
+							icon: "success"
+						  });
 						await getActions().getPlaces(); // Refrescar Locales
 					}
 				} catch (error) {
@@ -264,6 +288,49 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return { error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
 				}
 			},
+
+			//UPDATES
+
+			updateUser: async (user_id, user) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/user/admin/${user_id}`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(user)
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Usuario actualizado con éxito!",
+							icon: "success"
+						  });
+						await getActions().getUsers();
+					}
+				} catch (error) {
+					console.error("Error al actualizar usuario:", error);
+				}
+			},
+
+			updateBook: async (book_id, tittle, author) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/user/admin/${user_id}`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ is_admin })
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Libro actualizado con éxito!",
+							icon: "success"
+						  });
+						await getActions().getBooks();
+					}
+				} catch (error) {
+					console.error("Error al actualizar usuario:", error);
+				}
+			},
+
 			
 			
 		},
