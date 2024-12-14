@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import "../../styles/index.css";
 
 export const UserLogin = () => {
   const { store } = useContext(Context);
@@ -56,8 +57,8 @@ export const UserLogin = () => {
       </div>
 
       {/* Biblioteca y Locales */}
-      <div className="row m-0 text-center">
-        <div className="col-md-6 p-0">
+      <div className="row m-0 text-center responsive-container">
+        <div className="col-12 col-md-6 p-0 mb-3"> {/* Cambié a col-12 para pantallas pequeñas */}
           <Link to="/library" style={{ textDecoration: "none" }}>
             <div
               className="position-relative d-flex justify-content-center align-items-center btn-interactive"
@@ -70,7 +71,6 @@ export const UserLogin = () => {
                 color: "white",
               }}
             >
-              {/* Capa negra */}
               <div
                 className="position-absolute w-100"
                 style={{
@@ -87,7 +87,7 @@ export const UserLogin = () => {
             </div>
           </Link>
         </div>
-        <div className="col-md-6 p-0">
+        <div className="col-12 col-md-6 p-0"> {/* Cambié a col-12 para pantallas pequeñas */}
           <Link to="/locals" style={{ textDecoration: "none" }}>
             <div
               className="position-relative d-flex justify-content-center align-items-center btn-interactive"
@@ -100,7 +100,6 @@ export const UserLogin = () => {
                 color: "white",
               }}
             >
-              {/* Capa negra */}
               <div
                 className="position-absolute w-100"
                 style={{
@@ -119,3 +118,4 @@ export const UserLogin = () => {
     </div>
   );
 };
+

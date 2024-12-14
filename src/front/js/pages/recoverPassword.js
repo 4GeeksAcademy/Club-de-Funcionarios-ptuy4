@@ -34,9 +34,9 @@ export const RecoverPassword = () => {
                 required
               />
             </div>
-            <button className="btn btn-primary mb-2">Enviar enlace</button>
+            <button className="btn btn-primary mb-2">Enviar mail</button>
             <p className="mt-3">
-              Te enviaremos un enlace para recuperar tu contraseña a tu correo.
+              Te enviaremos un correo electrónico con una nueva contraseña.
             </p>
           </div>
         </div>
