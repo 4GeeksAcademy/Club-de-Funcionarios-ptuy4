@@ -151,9 +151,10 @@ def update_user(id):
         return jsonify({"error": "User not found"}), 404
     data = request.get_json()
     user.full_name = data.get('full_name', user.full_name)
-    user.email = data.get('email', user.email)
-    user.password = data.get('password', user.password)
+    user.email     = data.get('email', user.email)
+    user.password  = data.get('password', user.password)
     user.image_url = data.get('image_url', user.image_url)
+    user.is_admin  = data.get('is_admin', user.is_admin)
     user.is_active = data.get('is_active', user.is_active)
     db.session.commit()
     return jsonify({"message": "User updated successfully"}), 200
