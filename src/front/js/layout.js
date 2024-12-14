@@ -36,27 +36,20 @@ const Layout = () => {
                     <Route element={<Home />} path="/" />
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Register />} path="/register" />
-                    <Route element={<UserLogin />} path="/userLogin" />
-                    <Route element={<Library />} path="/library" /> 
-                    <Route element={<Profile />} path="/profile" /> 
                     <Route element={<Single />} path="/single/:theid" />
-                    <Route element={<Locals />} path="/locals" />
-                    <Route element={<AdminPage />} path="/adminPage" />
                     <Route element={<RecoverPassword />} path="/recoverPassword" />
-                    <Route element={<MyReservations />} path="/myReservations" />
-                    
+                                        
                     {/* Ruta protegida con ProtectedRoute */}
-                    <Route
-                        path="/userLogin"
-                        element={
-                            <ProtectedRoute>
-                                <UserLogin />
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route path="/userLogin" element={<ProtectedRoute> <UserLogin /> </ProtectedRoute>}/>
+                    <Route path="/adminPage" element={<ProtectedRoute> <AdminPage /> </ProtectedRoute>}/>
+                    <Route path="/library" element={<ProtectedRoute> <Library /> </ProtectedRoute>}/>
+                    <Route path="/locals" element={<ProtectedRoute> <Locals /> </ProtectedRoute>}/>
+                    <Route path="/myReservations" element={<ProtectedRoute> <MyReservations /> </ProtectedRoute>}/>
+                    <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>}/>
 
                     {/* Ruta para páginas no encontradas */}
                     <Route element={<h1>Not found!</h1>} path="*" />
+
                 </Routes>
                 <Footer />
             </BrowserRouter>

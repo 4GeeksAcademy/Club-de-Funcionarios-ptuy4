@@ -68,7 +68,8 @@ const Library = () => {
     setErrorMessage(""); // Limpiar cualquier mensaje de error anterior
   
     // Validación de fechas (si son menores a hoy)
- const today = new Date();
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 const todayFormatted = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // Solo día, mes y año
 
 for (const book of selectedBooks) {

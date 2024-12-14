@@ -211,6 +211,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 					// Comprobar si la fecha de la reserva es anterior a hoy
 					const today = new Date();
+					today.setHours(0, 0, 0, 0);
 					const startDate = new Date(reserv.start_time);
 					const endDate = new Date(reserv.end_time);
 			

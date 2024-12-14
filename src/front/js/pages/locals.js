@@ -38,6 +38,47 @@ const Locals = () => {
     setFilteredPlace(results);
   };
 
+  
+  const handleReservation = async (place) => {
+    // Verificar que la fecha de inicio y fin no sea anterior a hoy
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);  // Asegurarse de que la comparación se haga solo con las fechas, sin la hora
+  
+    const startDate = new Date(selectionRange.startDate);
+    const endDate = new Date(selectionRange.endDate);
+  
+    // Si las fechas son menores a hoy, mostrar error y salir
+    if (startDate < today || endDate < today) {
+      alert("La fecha seleccionada no puede ser anterior a hoy.");
+      return; // No continúa con la reserva si la fecha es incorrecta
+    }
+  
+    // Si las fechas son válidas, proceder con la reserva
+    console.log("Location ID:", place.location_id);
+    const reservationData = {
+      user_id: store.user.id, // Asumimos que el user_id está en el store
+      book_id: null, // Cambia esto si estás reservando un libro
+      location_id: place.location_id,
+      start_time: selectionRange.startDate.toISOString(),
+      end_time: selectionRange.endDate.toISOString(),
+      status: "reservado", // Puedes cambiar el estado según sea necesario
+    };
+  
+    // Llamar a la acción addSchedule que está en el store
+    const result = await actions.addSchedule(reservationData);
+  
+    if (result) {
+      console.log("Reserva realizada exitosamente");
+      // Aquí puedes realizar alguna acción posterior, como actualizar el estado
+    } else {
+      console.error("Error al hacer la reserva");
+      // Maneja el error, como mostrar un mensaje de fallo
+    }
+  };
+  
+  
+  
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -115,11 +156,12 @@ const Locals = () => {
                      <div className="fs-4 fw-bold">{place.name}</div>
                      <div>Capacidad: {place.capacity}</div>
                      <div>Dirección: {place.address}</div>
+                     
                    </div>
                  </div>
-               
-               
-                 <button className="btn btn-success">Reservar</button>
+                             
+                 <button className="btn btn-success" onClick={() => handleReservation(place)}>Reservar</button>
+
                </li>
                 ))}
               </ul>
