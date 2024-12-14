@@ -183,20 +183,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const getSchedulesResponse = await fetch(`${process.env.BACKEND_URL}api/schedule`);
 					if (!getSchedulesResponse.ok) throw new Error("Error al obtener reservas");
 					const reservations = await getSchedulesResponse.json();
-
+			
 					// Comprobar si el ítem está libre considerando book_id o location_id
 					const isItemFree = (item_id, isBook, start_date, end_date, reservations, status) => {
+						// Formatear las fechas a día, mes y año
 						const formatDate = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 						const startDate = formatDate(new Date(start_date));
 						const endDate = formatDate(new Date(end_date));
-
+			
 						for (const reserva of reservations) {
+							// Detectar si es una reserva de libro o ubicación
 							const reservaItemId = isBook ? reserva.book_id : reserva.location_id;
 			
+							// Si el id coincide, verificar solapamiento
 							if (reservaItemId === item_id) {
 								const reservaInicio = formatDate(new Date(reserva.start_time));
 								const reservaFin = formatDate(new Date(reserva.end_time));
 			
+								// Si el estado es cancelado, permitir solapamiento
 								if (reserva.status !== "cancelado" && !(startDate > reservaFin || endDate < reservaInicio)) {
 									return false; // no está disponible
 								}
@@ -204,39 +208,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 						return true; // Está disponible
 					};
-
+			
 					// Comprobar si la fecha de la reserva es anterior a hoy
 					const today = new Date();
 					today.setHours(0, 0, 0, 0);
 					const startDate = new Date(reserv.start_time);
 					const endDate = new Date(reserv.end_time);
-
+			
 					if (startDate < today || endDate < today) {
-						return { error: "La fecha seleccionada no puede ser anterior a hoy" };
+						return { error: "La fecha seleccionada no puede ser anterior a hoy." };
 					}
-
+			
 					// Verificar si el usuario ya tiene 3 reservas para el mismo libro
 					if (reserv.book_id !== null) {
 						const userReservations = reservations.filter(
 							(reservation) => reservation.user_id === reserv.user_id && reservation.book_id === reserv.book_id
 						);
-						
-						if (userReservations.length > 3) {
+			
+						if (userReservations.length >= 3) {
 							return { error: "El usuario no puede realizar más de 3 reservas para este libro." };
 						}
 					}
-
+			
 					// Determinar si se trata de un libro o una ubicación
 					const isBook = reserv.book_id !== null;
 					const itemId = isBook ? reserv.book_id : reserv.location_id;
-
+			
 					// Verificar disponibilidad
 					const available = isItemFree(itemId, isBook, reserv.start_time, reserv.end_time, reservations, reserv.status);
-
+			
 					if (!available) {
-						return { error: "El ítem no está disponible en las fechas seleccionadas" };
+						return { error: "El ítem no está disponible en las fechas seleccionadas." };
 					}
-
+			
 					// Realizar la reserva si está disponible
 					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`, {
 						method: "POST",
@@ -250,58 +254,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 							status: reserv.status
 						})
 					});
-
+			
 					const resp = await response.json();
-					
+			
 					if (response.ok) {
-						// Actualizar el store con las nuevas reservas
-						const getActions = getActions();
-						await getActions().getSchedules(); // Llamada para obtener la lista actualizada de reservas
+						await getActions().getSchedules();
 						return { success: true }; // Reserva realizada exitosamente
 					} else {
-						return { error: "Error al realizar la reserva" };
+						return { error: "Error al realizar la reserva. Intenta nuevamente." };
 					}
-
 				} catch (error) {
 					console.error("Error al añadir reserva:", error);
-					return { error: "Hubo un problema al procesar la reserva." };
+					return { error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
 				}
 			},
-
-			//UPDATES
-
-			updateUser: async (user_id, user) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/user/admin/${user_id}`, {
-						method: "PUT",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(user)
-					});
-					if (response.ok) {
-						alert("Usuario actualizado exitosamente");
-						await getActions().getUsers();
-					}
-				} catch (error) {
-					console.error("Error al actualizar usuario:", error);
-				}
-			},
-
-			updateBook: async (book_id, tittle, author) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/user/admin/${user_id}`, {
-						method: "PUT",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ is_admin })
-					});
-					if (response.ok) {
-						alert("Usuario actualizado exitosamente");
-						await getActions().getBooks();
-					}
-				} catch (error) {
-					console.error("Error al actualizar usuario:", error);
-				}
-			},
-
+			
+			
 			
 			
 		},

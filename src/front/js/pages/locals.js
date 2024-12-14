@@ -10,12 +10,13 @@ import { Context } from "../store/appContext";
 const Locals = () => {
   const { store, actions } = useContext(Context);
   const [filteredPlace, setFilteredPlace] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(""); 
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
     key: "selection",
   });
-  const [errorMessage, setErrorMessage] = useState(""); // Nuevo estado para manejar errores
+  
 
   useEffect(() => {
     actions.getPlaces();
@@ -40,21 +41,6 @@ const Locals = () => {
 
   const handleReservation = async (place) => {
     try {
-      // Verificar que la fecha de inicio y fin no sea anterior a hoy
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);  // Asegurarse de que la comparación se haga solo con las fechas, sin la hora
-    
-      const startDate = new Date(selectionRange.startDate);
-      const endDate = new Date(selectionRange.endDate);
-    
-      // Si las fechas son menores a hoy, mostrar error y salir
-      if (startDate < today || endDate < today) {
-        setErrorMessage("La fecha seleccionada no puede ser anterior a hoy.");
-        return; // No continúa con la reserva si la fecha es incorrecta
-      }
-    
-      // Si las fechas son válidas, proceder con la reserva
-      console.log("Location ID:", place.location_id);
       const reservationData = {
         user_id: store.user.id, 
         book_id: null, 
@@ -63,15 +49,24 @@ const Locals = () => {
         end_time: selectionRange.endDate.toISOString(),
         status: "reservado", 
       };
-    
-      // Llamar a la acción addSchedule que está en el store
+      
       const result = await actions.addSchedule(reservationData);
-    
+  
+      // Formatear las fechas de inicio y fin tomadas del DateRange
+      const formattedStartDate = selectionRange.startDate.toLocaleDateString('es-ES', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+      const formattedEndDate = selectionRange.endDate.toLocaleDateString('es-ES', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+  
       // Comprobar el resultado de la reserva
       if (result && result.success) {
-        console.log("Reserva realizada exitosamente");
-        // Limpiar el mensaje de error si la reserva fue exitosa
-        setErrorMessage("");
+        const successMessage = `Reserva realizada exitosamente. 
+                                Fecha de inicio: ${formattedStartDate} 
+                                Fecha de fin: ${formattedEndDate}`;
+      
+        setErrorMessage(successMessage);
       } else {
         // Si la respuesta del backend contiene un error, lo mostramos
         const errorMessage = result?.error || "Error desconocido al hacer la reserva";
@@ -79,15 +74,14 @@ const Locals = () => {
       }
     } catch (error) {
       // Captura cualquier error inesperado
-      console.error("Error al realizar la reserva:", error);
       setErrorMessage("Hubo un problema al procesar la reserva. Intenta nuevamente.");
     }
   };
-
+  
   return (
     <div className="container-fluid">
       <div className="row">
-        {/* Columna del calendario */}
+        
         <div
           className="col-12 col-md-5 d-flex flex-column align-items-center justify-content-center"
           style={{
@@ -138,7 +132,7 @@ const Locals = () => {
             </button>
           </div>
 
-          {/* Información del local (reemplazar lista dinámica) */}
+          
           {filteredPlace.length > 0 && (
             <div className="search-results mb-4">
               <h5>Resultados de búsqueda:</h5>
