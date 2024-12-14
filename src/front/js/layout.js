@@ -34,9 +34,9 @@ const Layout = () => {
                 <Routes>
                     {/* Rutas principales */}
                     <Route element={<Home />} path="/" />
-                    <Route element={<Demo />} path="/demo" />
+                    {/* <Route element={<Demo />} path="/demo" />*/}
                     <Route element={<Register />} path="/register" />
-                    <Route element={<Single />} path="/single/:theid" />
+                    {/*<Route element={<Single />} path="/single/:theid" />*/}
                     <Route element={<RecoverPassword />} path="/recoverPassword" />
                                         
                     {/* Ruta protegida con ProtectedRoute */}
