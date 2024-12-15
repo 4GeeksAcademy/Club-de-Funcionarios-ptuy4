@@ -13,6 +13,7 @@ const ProtectedRoute = ({ children, isAdminRequired = false }) => {
     return <Navigate to="/" />;
   }
 
+  
   // Si la página requiere ser admin y el usuario no es admin, redirige
   if (isAdminRequired && !isAdmin) {
     return <Navigate to="/userLogin" />; // Redirige al home si no es admin

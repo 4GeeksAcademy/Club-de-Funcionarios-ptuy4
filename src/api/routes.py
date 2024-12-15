@@ -9,6 +9,9 @@ from flask_cors import CORS
 import cloudinary.uploader
 import cloudinary
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 api = Blueprint('api', __name__)
 
@@ -129,11 +132,14 @@ def add_user():
     if not data.get('full_name') or not data.get('email') or not data.get('password'):
         return jsonify({"message": "Missing required fields"}), 400
     
+    password = data.get('password')
+    hashed_password = generate_password_hash(data.get('password'))
+    
     # Crear nuevo usuario
     new_user = User(
         full_name=data.get('full_name'),
         email=data.get('email'),
-        password=data.get('password'),
+        password=hashed_password,
         image_url=data.get('image_url'),
         is_active=data.get('is_active', True),  # Default True if not provided
         is_admin=data.get('is_admin', False)   # Default False if not provided
@@ -418,8 +424,8 @@ def login():
     if user == None:
         return jsonify ({"msg":"Bad email or password"}), 401
     
-    if user.password != password:
-        return jsonify ({"msg": "Bad email or password"}), 401
+    if not check_password_hash(user.password, password):
+        return jsonify({"msg": "Bad email or password"}), 401
     
     access_token = create_access_token(identity=user.email)
     return jsonify ({

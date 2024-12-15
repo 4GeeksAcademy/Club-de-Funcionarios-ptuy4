@@ -31,6 +31,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Usuario creado con éxito!",
 							icon: "success"
 						  });
+						
+						  const actions = getActions();
+						  const loginSuccess = await actions.login(email, password);
+			  
+						  if (loginSuccess) {
+							  // Redirigir al usuario al área protegida (ajusta la ruta según tu aplicación)
+							  window.location.href = "/userLogin"; // O la ruta que necesites
+						  } else {
+							  Swal.fire({
+								  icon: "error",
+								  title: "Oops...",
+								  text: "Error al iniciar sesión automáticamente después del registro.",
+							  });
+						  }
+			  
+						
 						// Datos para el correo
 						const emailData = {
 							to: email,
