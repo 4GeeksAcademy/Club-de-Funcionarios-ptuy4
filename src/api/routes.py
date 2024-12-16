@@ -316,7 +316,7 @@ def get_schedules_by_user(user_id):
         )
         .outerjoin(Book, Schedule.book_id == Book.book_id)
         .outerjoin(Location, Schedule.location_id == Location.location_id)
-        .filter(Schedule.user_id == user_id)
+        .filter(Schedule.user_id == user_id, Schedule.status != "cancelado")
         .all()
     )
 
@@ -338,8 +338,6 @@ def get_schedules_by_user(user_id):
         return jsonify(results), 200
 
     return jsonify({"error": "No schedules found for this user"}), 404
-
-
 
 @api.route('/schedule', methods=['POST'])
 def add_schedule():

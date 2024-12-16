@@ -1,31 +1,42 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import Swal from "sweetalert2";
 
 export const MyReservations = () => {
   const { store, actions } = useContext(Context);
-  const [reservations, setReservations] = useState([]); // Estado para las reservas
-  const [showModal, setShowModal] = useState(false);
-  const [selectedReservation, setSelectedReservation] = useState(null);
+  const [reservations, setReservations] = useState([]);
+
+  const fetchReservations = async () => {
+    const userReservations = await actions.getUserSchedules(store.user.id);
+    console.log(userReservations);
+    setReservations(Array.isArray(userReservations) ? userReservations : []);
+  };
 
   useEffect(() => {
-    const fetchReservations = async () => {
-      const userReservations = await actions.getUserSchedules(store.user.id);
-      setReservations(Array.isArray(userReservations) ? userReservations : []);
-    };
-
     fetchReservations();
   }, [actions, store.user.user_id]);
 
-  const handleCancel = (id) => {
-    setSelectedReservation(id);
-    setShowModal(true);
-  };
+  const cleanDates = (date) => {
+    const cleanDate = date.split("T")
+    return cleanDate[0];
+  }
 
-  const confirmCancel = () => {
-    console.log(`Reserva con ID ${selectedReservation} cancelada`);
-    setReservations(reservations.filter((res) => res.id !== selectedReservation));
-    setShowModal(false);
+  const handleCancel = (id) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Cancelarás tu reserva, este cambio no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "¡Si, hazlo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        actions.updateSchedule(id, { status: "cancelado" });
+        fetchReservations();
+      }
+    });
   };
 
   return (
@@ -59,7 +70,7 @@ export const MyReservations = () => {
           <h1 className="mb-4">Mis Reservas</h1>
 
           {reservations.length === 0 ? (
-            <p className="text-center">No tienes reservas actualmente.</p>
+            <p className="text-center">No tienes reservas activas actualmente.</p>
           ) : (
             reservations.map((reservation, index) => (
               <div
@@ -85,12 +96,12 @@ export const MyReservations = () => {
                     </p>
                   )}
                   <p>
-                    <strong>Fechas:</strong> {reservation.start_time} -{" "}
-                    {reservation.end_time}
+                    <strong>Fechas:</strong> Desde {" "} {cleanDates(reservation.start_time)} hasta{" "}
+                    {cleanDates(reservation.end_time)}
                   </p>
                   <button
                     className="btn btn-danger mt-2"
-                    onClick={() => handleCancel(reservation.id)}
+                    onClick={() => handleCancel(reservation.schedule_id)}
                   >
                     Cancelar Reserva
                   </button>
@@ -104,51 +115,6 @@ export const MyReservations = () => {
           </Link>
         </div>
       </div>
-
-      {/* Modal */}
-      {showModal && selectedReservation && (
-        <div
-          className="modal d-block"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <div className="modal-dialog">
-            <div className="modal-content" style={{ color: "black" }}>
-              <div className="modal-header">
-                <h5 className="modal-title">Confirmar Cancelación</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  ¿Estás seguro de que deseas cancelar la reserva de{" "}
-                  <strong>
-                    {
-                      reservations.find(
-                        (res) => res.id === selectedReservation
-                      ).type
-                    }
-                  </strong>
-                  ?
-                </p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cerrar
-                </button>
-                <button className="btn btn-danger" onClick={confirmCancel}>
-                  Cancelar Reserva
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

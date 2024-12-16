@@ -45,8 +45,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 								text: "Error al iniciar sesión automáticamente después del registro.",
 							});
 						}
-
-
 						// Datos para el correo
 						const emailData = {
 							to: email,
@@ -63,12 +61,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 						return true;
 					} else {
-						Swal.fire({
-							icon: "error",
-							title: "Oops...",
-							text: "Error al registrar el usuario",
-							footer: data.msg
-						});
 						Swal.fire({
 							icon: "error",
 							title: "Oops...",
@@ -101,12 +93,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ token: data.token, user: data.user, isAuthenticated: true });
 						return true;
 					} else {
-						Swal.fire({
-							icon: "error",
-							title: "Oops...",
-							text: "Error al iniciar sesión",
-							footer: data.msg
-						});
 						Swal.fire({
 							icon: "error",
 							title: "Oops...",
@@ -153,16 +139,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			// Obtener lugares y actualizar el store
+			// Obtener locales y actualizar el store
 			getPlaces: async () => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/place`);
-					if (!response.ok) throw new Error("Error al obtener lugares");
+					if (!response.ok) throw new Error("Error al obtener locales");
 
 					const data = await response.json();
 					setStore({ places: data });
 				} catch (error) {
-					console.error("Error al obtener lugares:", error);
+					console.error("Error al obtener locales:", error);
 				}
 			},
 			getSchedules: async () => {
@@ -176,33 +162,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al obtener reservas:", error);
 				}
 			},
+
 			getUserSchedules: async (userID) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/schedule/user/${userID}`);
-					if (!response.ok) throw new Error("Error al obtener reservas del usuario");
-
+					if (!response.ok) {
+						throw new Error(`Error al obtener reservas del usuario: ${data.message || JSON.stringify(data)}`);
+					}
 					const data = await response.json();
 					return data;
 				} catch (error) {
-					console.error(`Error al obtener reservas del usuario ${userID} : ${error}`);
+					console.error(`Error al obtener reservas del usuario ${userID}: ${error.message}`);
 				}
 			},
 
-
 			// Metodos POST
-			addBook: async (title, author) => {
+			addBook: async (book) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/book`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ title, author })
+						body: JSON.stringify(book)
 					});
 					if (response.ok) {
-						Swal.fire({
-							title: "Libro",
-							text: "Libro creado con éxito!",
-							icon: "success"
-						});
 						Swal.fire({
 							title: "Libro",
 							text: "Libro creado con éxito!",
@@ -214,19 +196,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al añadir libro:", error);
 				}
 			},
-			addPlace: async (name, address, capacity) => {
+			addPlace: async (place) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/place`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ name, address, capacity })
+						body: JSON.stringify(place)
 					});
 					if (response.ok) {
-						Swal.fire({
-							title: "Local",
-							text: "Local creado con éxito!",
-							icon: "success"
-						});
 						Swal.fire({
 							title: "Local",
 							text: "Local creado con éxito!",
@@ -283,139 +260,49 @@ const getState = ({ getStore, getActions, setStore }) => {
 						);
 
 						if (activeBookReservations.length >= 3) {
-							return { error: "El usuario no puede realizar más de 3 reservas de libros." };
+							return { error: "El usuario no puede realizar más de 3 reservas de libros activas." };
 						}
 					}
 
-					// Determinar si se trata de un libro o una ubicación
-					const isBook = reserv.book_id !== null;
-					const itemId = isBook ? reserv.book_id : reserv.location_id;
-
-					// Verificar disponibilidad
-					const available = isItemFree(itemId, isBook, reserv.start_time, reserv.end_time, reservations, reserv.status);
-
-					if (!available) {
-						return { error: "El ítem no está disponible en las fechas seleccionadas." };
+					// Verificar disponibilidad del ítem
+					if (reserv.book_id !== null) {
+						const isAvailable = isItemFree(reserv.book_id, true, reserv.start_time, reserv.end_time, reservations, reserv.status);
+						if (!isAvailable) {
+							return { error: "El libro no está disponible en las fechas seleccionadas." };
+						}
 					}
 
-					// Realizar la reserva si está disponible
+					if (reserv.location_id !== null) {
+						const isAvailable = isItemFree(reserv.location_id, false, reserv.start_time, reserv.end_time, reservations, reserv.status);
+						if (!isAvailable) {
+							return { error: "El local no está disponible en las fechas seleccionadas." };
+						}
+					}
+
 					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							user_id: reserv.user_id,
-							book_id: reserv.book_id,
-							location_id: reserv.location_id,
-							start_time: reserv.start_time,
-							end_time: reserv.end_time,
-							status: reserv.status
-						})
+						body: JSON.stringify(reserv)
 					});
 
-					const resp = await response.json();
-
-					if (response.ok) {
-						await getActions().getSchedules(); // Actualiza el store llamando a la acción
-						return { success: "Reserva realizada exitosamente." };
-					} else {
-						return { error: "Error al realizar la reserva. Intenta nuevamente." };
-					}
-
-				} catch (error) {
-					console.error("Error al añadir reserva:", error);
-					return { error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
-				}
-			},
-
-			//UPDATES
-
-			updateUser: async (user_id, user) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/user/admin/${user_id}`, {
-						method: "PUT",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(user)
-					});
 					if (response.ok) {
 						Swal.fire({
-							title: "Actualizado",
-							text: "Usuario actualizado con éxito!",
+							title: "Reserva",
+							text: "Reserva creada con éxito!",
 							icon: "success"
 						});
-						Swal.fire({
-							title: "Actualizado",
-							text: "Usuario actualizado con éxito!",
-							icon: "success"
-						});
-						await getActions().getUsers();
-					}
-				} catch (error) {
-					console.error("Error al actualizar usuario:", error);
-				}
-			},
-
-			updateBook: async (book_id, tittle, author) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/user/admin/${user_id}`, {
-						method: "PUT",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ is_admin })
-					});
-					if (response.ok) {
-						Swal.fire({
-							title: "Actualizado",
-							text: "Libro actualizado con éxito!",
-							icon: "success"
-						});
-						Swal.fire({
-							title: "Actualizado",
-							text: "Libro actualizado con éxito!",
-							icon: "success"
-						});
-						await getActions().getBooks();
-					}
-				} catch (error) {
-					console.error("Error al actualizar usuario:", error);
-				}
-			},
-
-			recoverUserPass: async (email) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/recover-password`, {
-						method: "PUT",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ email })  // Enviar el correo electrónico
-					});
-			
-					if (response.ok) {
-						Swal.fire({
-							title: "Recuperación exitosa",
-							text: "Te hemos enviado un correo con tu nueva contraseña.",
-							icon: "success"
-						});
-						
+						return true;
 					} else {
 						const errorData = await response.json();
-						Swal.fire({
-							title: "Error",
-							text: errorData.msg || "Hubo un problema al recuperar la contraseña.",
-							icon: "error"
-						});
+						return { error: errorData.msg || "Error al crear la reserva." };
 					}
 				} catch (error) {
-					console.error("Error al intentar recuperar la contraseña:", error);
-					Swal.fire({
-						title: "Error",
-						text: "Ocurrió un error al intentar recuperar la contraseña.",
-						icon: "error"
-					});
+					console.error("Error al añadir reserva:", error);
+					return { error: "Error en el servidor al crear la reserva." };
 				}
-			},
-
-
-
-		},
-	};
+			}
+		}
+	}
 };
 
 export default getState;
