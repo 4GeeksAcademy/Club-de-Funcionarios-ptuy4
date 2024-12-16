@@ -1,5 +1,7 @@
 import os
 import smtplib
+import string
+import random
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Flask, request, jsonify, url_for, Blueprint
@@ -437,6 +439,45 @@ def login():
             "is_admin": user.is_admin
         }    
         }), 201
+
+
+
+@api.route('/recover-password', methods=['PUT'])
+def recoverPassword():
+    def generate_random_password(length=10):
+        # Generar una contraseña aleatoria con caracteres alfanuméricos y de puntuación
+        characters = string.ascii_letters + string.digits + string.punctuation
+        return ''.join(random.choice(characters) for i in range(length))
+
+    # Obtener el correo desde la solicitud JSON
+    body = request.json
+    email = body.get("email")
+
+    # Validar que se ha proporcionado un correo
+    if not email:
+        return jsonify({"error": "Please enter a valid email"}), 400
+    
+    # Buscar al usuario con ese correo
+    user = User.query.filter_by(email=email).one_or_none()
+
+    # Si no se encuentra al usuario, enviar mensaje de error
+    if user is None:
+        return jsonify({"msg": "User doesn't exist"}), 404
+
+    # Generar una nueva contraseña aleatoria
+    new_password = generate_random_password()
+
+    print(new_password)
+
+    # Encriptar la nueva contraseña antes de guardarla
+    hashed_password = generate_password_hash(new_password)
+
+    # Actualizar la contraseña del usuario en la base de datos
+    user.password = hashed_password
+    db.session.commit()
+
+    return jsonify({"message": "Password reovery succesefuly"}), 200
+    # Datos para el correo        
 
 @api.route('/protected', methods=['GET'])
 @jwt_required()

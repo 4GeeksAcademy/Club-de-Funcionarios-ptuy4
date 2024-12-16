@@ -1,7 +1,27 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Context } from "../store/appContext"; 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export const RecoverPassword = () => {
+  const { actions } = useContext(Context); 
+  const [email, setEmail] = useState(""); 
+
+  
+  const handleRecoverPassword = () => {
+    if (!email) {
+      // Validación simple para verificar que el correo no esté vacío
+      Swal.fire({
+        title: "Error",
+        text: "Por favor, introduce un correo electrónico válido.",
+        icon: "error",
+      });
+      return;
+    }
+    
+    actions.recoverUserPass(email);
+  };
+
   return (
     <div
       className="container-fluid d-flex align-items-center justify-content-center"
@@ -32,9 +52,16 @@ export const RecoverPassword = () => {
                 placeholder="Correo electrónico"
                 aria-label="correoElectronico"
                 required
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
               />
             </div>
-            <button className="btn btn-primary mb-2">Enviar mail</button>
+            <button
+              className="btn btn-primary mb-2"
+              onClick={handleRecoverPassword} 
+            >
+              Enviar mail
+            </button>
             <p className="mt-3">
               Te enviaremos un correo electrónico con una nueva contraseña.
             </p>

@@ -379,6 +379,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			recoverUserPass: async (email) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/recover-password`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ email })  // Enviar el correo electrónico
+					});
+			
+					if (response.ok) {
+						Swal.fire({
+							title: "Recuperación exitosa",
+							text: "Te hemos enviado un correo con tu nueva contraseña.",
+							icon: "success"
+						});
+						
+					} else {
+						const errorData = await response.json();
+						Swal.fire({
+							title: "Error",
+							text: errorData.msg || "Hubo un problema al recuperar la contraseña.",
+							icon: "error"
+						});
+					}
+				} catch (error) {
+					console.error("Error al intentar recuperar la contraseña:", error);
+					Swal.fire({
+						title: "Error",
+						text: "Ocurrió un error al intentar recuperar la contraseña.",
+						icon: "error"
+					});
+				}
+			},
+
 
 
 		},
