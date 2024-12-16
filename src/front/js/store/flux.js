@@ -1,7 +1,5 @@
 import Swal from 'sweetalert2'
 
-import Swal from 'sweetalert2'
-
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -32,23 +30,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 							title: "Registro",
 							text: "Usuario creado con éxito!",
 							icon: "success"
-						  });
-						
-						  const actions = getActions();
-						  const loginSuccess = await actions.login(email, password);
-			  
-						  if (loginSuccess) {
-							  // Redirigir al usuario al área protegida (ajusta la ruta según tu aplicación)
-							  window.location.href = "/userLogin"; // O la ruta que necesites
-						  } else {
-							  Swal.fire({
-								  icon: "error",
-								  title: "Oops...",
-								  text: "Error al iniciar sesión automáticamente después del registro.",
-							  });
-						  }
-			  
-						
+						});
+
+						const actions = getActions();
+						const loginSuccess = await actions.login(email, password);
+
+						if (loginSuccess) {
+							// Redirigir al usuario al área protegida (ajusta la ruta según tu aplicación)
+							window.location.href = "/userLogin"; // O la ruta que necesites
+						} else {
+							Swal.fire({
+								icon: "error",
+								title: "Oops...",
+								text: "Error al iniciar sesión automáticamente después del registro.",
+							});
+						}
+
+
 						// Datos para el correo
 						const emailData = {
 							to: email,
@@ -70,13 +68,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 							title: "Oops...",
 							text: "Error al registrar el usuario",
 							footer: data.msg
-						  });
+						});
 						Swal.fire({
 							icon: "error",
 							title: "Oops...",
 							text: "Error al registrar el usuario",
 							footer: data.msg
-						  });
+						});
 						return false;
 					}
 				} catch (error) {
@@ -108,13 +106,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 							title: "Oops...",
 							text: "Error al iniciar sesión",
 							footer: data.msg
-						  });
+						});
 						Swal.fire({
 							icon: "error",
 							title: "Oops...",
 							text: "Error al iniciar sesión",
 							footer: data.msg
-						  });
+						});
 						return false;
 					}
 				} catch (error) {
@@ -204,12 +202,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							title: "Libro",
 							text: "Libro creado con éxito!",
 							icon: "success"
-						  });
+						});
 						Swal.fire({
 							title: "Libro",
 							text: "Libro creado con éxito!",
 							icon: "success"
-						  });
+						});
 						await getActions().getBooks();
 					}
 				} catch (error) {
@@ -228,12 +226,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							title: "Local",
 							text: "Local creado con éxito!",
 							icon: "success"
-						  });
+						});
 						Swal.fire({
 							title: "Local",
 							text: "Local creado con éxito!",
 							icon: "success"
-						  });
+						});
 						await getActions().getPlaces(); // Refrescar Locales
 					}
 				} catch (error) {
@@ -247,19 +245,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const getSchedulesResponse = await fetch(`${process.env.BACKEND_URL}api/schedule`);
 					if (!getSchedulesResponse.ok) throw new Error("Error al obtener reservas");
 					const reservations = await getSchedulesResponse.json();
-			
+
 					// Comprobar si el ítem está libre considerando book_id o location_id
 					const isItemFree = (item_id, isBook, start_date, end_date, reservations, status) => {
 						const formatDate = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 						const startDate = formatDate(new Date(start_date));
 						const endDate = formatDate(new Date(end_date));
-			
+
 						for (const reserva of reservations) {
 							const reservaItemId = isBook ? reserva.book_id : reserva.location_id;
 							if (reservaItemId === item_id) {
 								const reservaInicio = formatDate(new Date(reserva.start_time));
 								const reservaFin = formatDate(new Date(reserva.end_time));
-			
+
 								if (reserva.status !== "cancelado" && !(startDate > reservaFin || endDate < reservaInicio)) {
 									return false; // no está disponible
 								}
@@ -267,39 +265,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 						return true; // Está disponible
 					};
-			
+
 					// Comprobar si la fecha de la reserva es anterior a hoy
 					const today = new Date();
 					today.setHours(0, 0, 0, 0);
 					const startDate = new Date(reserv.start_time);
 					const endDate = new Date(reserv.end_time);
-			
+
 					if (startDate < today || endDate < today) {
 						return { error: "La fecha seleccionada no puede ser anterior a hoy." };
 					}
-			
+
 					// Verificar si el usuario ya tiene 3 reservas activas de libros
 					if (reserv.book_id !== null) {
 						const activeBookReservations = reservations.filter(
 							(reservation) => reservation.user_id === reserv.user_id && reservation.book_id !== null && reservation.status === "reservado"
 						);
-			
+
 						if (activeBookReservations.length >= 3) {
 							return { error: "El usuario no puede realizar más de 3 reservas de libros." };
 						}
 					}
-			
+
 					// Determinar si se trata de un libro o una ubicación
 					const isBook = reserv.book_id !== null;
 					const itemId = isBook ? reserv.book_id : reserv.location_id;
-			
+
 					// Verificar disponibilidad
 					const available = isItemFree(itemId, isBook, reserv.start_time, reserv.end_time, reservations, reserv.status);
-			
+
 					if (!available) {
 						return { error: "El ítem no está disponible en las fechas seleccionadas." };
 					}
-			
+
 					// Realizar la reserva si está disponible
 					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`, {
 						method: "POST",
@@ -313,16 +311,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 							status: reserv.status
 						})
 					});
-			
+
 					const resp = await response.json();
-			
+
 					if (response.ok) {
 						await getActions().getSchedules(); // Actualiza el store llamando a la acción
 						return { success: "Reserva realizada exitosamente." };
 					} else {
 						return { error: "Error al realizar la reserva. Intenta nuevamente." };
 					}
-			
+
 				} catch (error) {
 					console.error("Error al añadir reserva:", error);
 					return { error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
@@ -343,12 +341,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							title: "Actualizado",
 							text: "Usuario actualizado con éxito!",
 							icon: "success"
-						  });
+						});
 						Swal.fire({
 							title: "Actualizado",
 							text: "Usuario actualizado con éxito!",
 							icon: "success"
-						  });
+						});
 						await getActions().getUsers();
 					}
 				} catch (error) {
@@ -368,12 +366,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							title: "Actualizado",
 							text: "Libro actualizado con éxito!",
 							icon: "success"
-						  });
+						});
 						Swal.fire({
 							title: "Actualizado",
 							text: "Libro actualizado con éxito!",
 							icon: "success"
-						  });
+						});
 						await getActions().getBooks();
 					}
 				} catch (error) {
@@ -381,8 +379,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			
-			
+
+
 		},
 	};
 };

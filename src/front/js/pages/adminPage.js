@@ -29,7 +29,7 @@ export const AdminPage = () => {
 
 	const handleEditUser = (modalKey, user_id) => {
 		const modalData = formValues[modalKey];
-		if(modalData) {
+		if (modalData) {
 			const userData = {
 				is_admin: true
 			}
@@ -41,24 +41,25 @@ export const AdminPage = () => {
 	const handleEditBook = (modalKey, book_id) => {
 		const modalData = formValues[modalKey];
 		console.log(modalData)
-		if(modalData) {
+		if (modalData) {
+			console.log(modalData);
 			const bookData = {
-				title: modalData.title,
-				author: modalData.author
-			}
-			actions.updateBook(book_id, bookData);
+				title: modalData.title !== undefined ? modalData.title : null,
+				author: modalData.author !== undefined ? modalData.author : null
+			};
+			// actions.updateBook(book_id, bookData);
 		}
 	}
 
 	const handleDeleteBook = (book_id) => {
-		if(book_id) {
+		if (book_id) {
 			actions.deleteBook(book_id);
 		}
 	}
 
 	const handleCreateBook = (modalKey) => {
 		const modalData = formValues[modalKey];
-		if(modalData.title && modalData.author) {
+		if (modalData.title && modalData.author) {
 			const bookData = {
 				title: modalData.title,
 				author: modalData.author
@@ -255,7 +256,6 @@ export const AdminPage = () => {
 								<th scope="col">Titulo</th>
 								<th scope="col">Autor</th>
 								<th scope="col">Disponible</th>
-								<th scope="col">Disponible</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -416,7 +416,6 @@ export const AdminPage = () => {
 								<th scope="col">Capacidad</th>
 								<th scope="col">Dirección</th>
 								<th scope="col">Activo</th>
-								<th scope="col">Activo</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -445,14 +444,6 @@ export const AdminPage = () => {
 											aria-labelledby={`editPlaceModalLabel-${index}`}
 											aria-hidden="true"
 										>
-
-										<div
-											className="modal fade"
-											id={`editPlaceModal-${index}`}
-											tabIndex="-1"
-											aria-labelledby={`editPlaceModalLabel-${index}`}
-											aria-hidden="true"
-										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
@@ -462,7 +453,6 @@ export const AdminPage = () => {
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div className="modal-body">
-														<p>Puedes dejar vacíos los campos que no quieras actualizar</p>
 														<form>
 															<div className="mb-3">
 																<label className="col-form-label">Nombre:</label>
@@ -632,16 +622,16 @@ export const AdminPage = () => {
 
 										<div
 											className="modal fade"
-											id={`editUserModal-${index}`}
+											id={`editScheduleModal-${index}`}
 											tabIndex="-1"
-											aria-labelledby={`editUserModalLabel-${index}`}
+											aria-labelledby={`editScheduleModalLabel-${index}`}
 											aria-hidden="true"
 										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
-														<h1 className="modal-title fs-5" id={`editUserModalLabel-${index}`}>
-															Editar Usuario
+														<h1 className="modal-title fs-5" id={`editScheduleModalLabel-${index}`}>
+															Editar Reserva
 														</h1>
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
