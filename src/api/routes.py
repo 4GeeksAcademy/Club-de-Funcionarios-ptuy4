@@ -253,11 +253,29 @@ def update_place(id):
     location = Location.query.get(id)
     if not location:
         return jsonify({"error": "Location not found"}), 404
+
+    file = request.files.get('file')
+    image_url = location.image_url  # Por defecto, mantener la imagen actual
+
+    if file:
+        try:
+            # Hacer una petición POST a la ruta upload-image-resized con el archivo
+            upload_url = f"{os.getenv('BACKEND_URL')}/api/upload-image-resized"
+            files = {'file': (file.filename, file.stream, file.mimetype)}
+            upload_response = requests.post(upload_url, files=files)
+
+            if upload_response.status_code == 200:
+                image_url = upload_response.json().get('url')
+            else:
+                return jsonify({"error": "Failed to upload image"}), 500
+        except Exception as e:
+            return jsonify({"error": f"Error uploading image: {str(e)}"}), 500
+    
     data = request.get_json()
     location.name = data.get('name', location.name)
     location.capacity = data.get('capacity', location.capacity)
     location.address = data.get('address', location.address)
-    location.image_url = data.get('image_url', location.image_url)
+    location.image_url = image_url, location.image_url
     location.is_active = data.get('is_active', location.is_active)
     db.session.commit()
     return jsonify({"message": "Location updated successfully"}), 200
