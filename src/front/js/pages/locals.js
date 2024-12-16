@@ -10,13 +10,13 @@ import { Context } from "../store/appContext";
 const Locals = () => {
   const { store, actions } = useContext(Context);
   const [filteredPlace, setFilteredPlace] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
     key: "selection",
   });
-  
+
 
   useEffect(() => {
     actions.getPlaces();
@@ -42,16 +42,16 @@ const Locals = () => {
   const handleReservation = async (place) => {
     try {
       const reservationData = {
-        user_id: store.user.id, 
-        book_id: null, 
+        user_id: store.user.id,
+        book_id: null,
         location_id: place.location_id,
         start_time: selectionRange.startDate.toISOString(),
         end_time: selectionRange.endDate.toISOString(),
-        status: "reservado", 
+        status: "reservado",
       };
-      
+
       const result = await actions.addSchedule(reservationData);
-  
+
       // Formatear las fechas de inicio y fin tomadas del DateRange
       const formattedStartDate = selectionRange.startDate.toLocaleDateString('es-ES', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
@@ -59,13 +59,13 @@ const Locals = () => {
       const formattedEndDate = selectionRange.endDate.toLocaleDateString('es-ES', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
-  
+
       // Comprobar el resultado de la reserva
       if (result && result.success) {
         const successMessage = `Reserva realizada exitosamente. 
                                 Fecha de inicio: ${formattedStartDate} 
                                 Fecha de fin: ${formattedEndDate}`;
-      
+
         setErrorMessage(successMessage);
       } else {
         // Si la respuesta del backend contiene un error, lo mostramos
@@ -77,11 +77,11 @@ const Locals = () => {
       setErrorMessage("Hubo un problema al procesar la reserva. Intenta nuevamente.");
     }
   };
-  
+
   return (
     <div className="container-fluid">
       <div className="row">
-        
+
         <div
           className="col-12 col-md-5 d-flex flex-column align-items-center justify-content-center"
           style={{
@@ -132,7 +132,7 @@ const Locals = () => {
             </button>
           </div>
 
-          
+
           {filteredPlace.length > 0 && (
             <div className="search-results mb-4">
               <h5>Resultados de búsqueda:</h5>
@@ -143,11 +143,11 @@ const Locals = () => {
                     className="list-group-item d-flex justify-content-between align-items-center"
                   >
                     <div className="d-flex">
-                      <img 
-                        src={place.image_url} 
-                        alt={`Imagen de ${place.name}`} 
-                        width="150" 
-                        className="me-3" 
+                      <img
+                        src={place.image_url}
+                        alt={`Imagen de ${place.name}`}
+                        width="150"
+                        className="me-3"
                       />
                       <div>
                         <div className="fs-4 fw-bold">{place.name}</div>
@@ -164,7 +164,7 @@ const Locals = () => {
 
           {/* Mostrar error debajo de los locales */}
           {errorMessage && (
-            <div className="alert alert-danger mt-4">
+            <div className="alert alert-success mt-4">
               {errorMessage}
             </div>
           )}

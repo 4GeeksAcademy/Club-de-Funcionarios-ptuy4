@@ -9,7 +9,6 @@ export const MyReservations = () => {
 
   const fetchReservations = async () => {
     const userReservations = await actions.getUserSchedules(store.user.id);
-    console.log(userReservations);
     setReservations(Array.isArray(userReservations) ? userReservations : []);
   };
 

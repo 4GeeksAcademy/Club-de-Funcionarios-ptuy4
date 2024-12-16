@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -260,48 +261,225 @@ const getState = ({ getStore, getActions, setStore }) => {
 						);
 
 						if (activeBookReservations.length >= 3) {
-							return { error: "El usuario no puede realizar más de 3 reservas de libros activas." };
+							return { error: "El usuario no puede realizar más de 3 reservas de libros." };
 						}
 					}
 
-					// Verificar disponibilidad del ítem
-					if (reserv.book_id !== null) {
-						const isAvailable = isItemFree(reserv.book_id, true, reserv.start_time, reserv.end_time, reservations, reserv.status);
-						if (!isAvailable) {
-							return { error: "El libro no está disponible en las fechas seleccionadas." };
-						}
+					// Determinar si se trata de un libro o una ubicación
+					const isBook = reserv.book_id !== null;
+					const itemId = isBook ? reserv.book_id : reserv.location_id;
+
+					// Verificar disponibilidad
+					const available = isItemFree(itemId, isBook, reserv.start_time, reserv.end_time, reservations, reserv.status);
+
+					if (!available) {
+						return { error: "El ítem no está disponible en las fechas seleccionadas." };
 					}
 
-					if (reserv.location_id !== null) {
-						const isAvailable = isItemFree(reserv.location_id, false, reserv.start_time, reserv.end_time, reservations, reserv.status);
-						if (!isAvailable) {
-							return { error: "El local no está disponible en las fechas seleccionadas." };
-						}
-					}
-
+					// Realizar la reserva si está disponible
 					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(reserv)
+						body: JSON.stringify({
+							user_id: reserv.user_id,
+							book_id: reserv.book_id,
+							location_id: reserv.location_id,
+							start_time: reserv.start_time,
+							end_time: reserv.end_time,
+							status: reserv.status
+						})
 					});
 
+					const resp = await response.json();
+
 					if (response.ok) {
-						Swal.fire({
-							title: "Reserva",
-							text: "Reserva creada con éxito!",
-							icon: "success"
-						});
-						return true;
+						await getActions().getSchedules(); // Actualiza el store llamando a la acción
+						return { success: "Reserva realizada exitosamente." };
 					} else {
-						const errorData = await response.json();
-						return { error: errorData.msg || "Error al crear la reserva." };
+						return { error: "Error al realizar la reserva. Intenta nuevamente." };
 					}
+
 				} catch (error) {
 					console.error("Error al añadir reserva:", error);
-					return { error: "Error en el servidor al crear la reserva." };
+					return { error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
+				}
+			},
+
+			//UPDATES
+
+			updateUser: async (user_id, user) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/user/${user_id}`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(user)
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Usuario actualizado con éxito!",
+							icon: "success"
+						});
+						await getActions().getUsers();
+					}
+				} catch (error) {
+					console.error("Error al actualizar usuario:", error);
+				}
+			},
+
+			updateBook: async (book_id, book) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/book/${book_id}`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(book)
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Libro actualizado con éxito!",
+							icon: "success"
+						});
+						await getActions().getBooks();
+					}
+				} catch (error) {
+					console.error("Error al actualizar libro:", error);
+				}
+			},
+
+			updatePlace: async (place_id, place) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/place/${place_id}`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(place)
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Local actualizado con éxito!",
+							icon: "success"
+						});
+						await getActions().getPlaces();
+					}
+				} catch (error) {
+					console.error("Error al actualizar local:", error);
+				}
+			},
+
+			updateSchedule: async (schedule_id, schedule) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/schedule/${schedule_id}`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(schedule)
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Reserva actualizada con éxito!",
+							icon: "success"
+						});
+						await getActions().getBooks();
+					}
+				} catch (error) {
+					console.error("Error al actualizar reserva:", error);
+				}
+			},
+
+			//DELETES
+
+			deleteUser: async (user_id) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/user/${user_id}`, {
+						method: "DELETE",
+						headers: { "Content-Type": "application/json" }
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Eliminado",
+							text: "Usuario eliminado con éxito!",
+							icon: "success"
+						});
+						await getActions().logout();
+						navigate('/');
+					}
+				} catch (error) {
+					console.error("Error al eliminar usuario:", error);
 				}
 			}
-		}
+		},
+
+		deleteBook: async (book_id) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}api/book/${book_id}`, {
+					method: "DELETE",
+					headers: { "Content-Type": "application/json" }
+				});
+				if (response.ok) {
+					Swal.fire({
+						title: "Eliminado",
+						text: "Libro eliminado con éxito!",
+						icon: "success"
+					});
+					await getActions().getBooks();
+				}
+			} catch (error) {
+				console.error("Error al eliminar libro:", error);
+			}
+		},
+
+		deletePlace: async (place_id) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}api/place/${place_id}`, {
+					method: "DELETE",
+					headers: { "Content-Type": "application/json" }
+				});
+				if (response.ok) {
+					Swal.fire({
+						title: "Eliminado",
+						text: "Local eliminado con éxito!",
+						icon: "success"
+					});
+					await getActions().getBooks();
+				}
+			} catch (error) {
+				console.error("Error al eliminar local:", error);
+			}
+		},
+
+		recoverUserPass: async (email) => {
+			try {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/recover-password`, {
+					method: "PUT",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ email })  // Enviar el correo electrónico
+				});
+
+				if (response.ok) {
+					Swal.fire({
+						title: "Recuperación exitosa",
+						text: "Te hemos enviado un correo con tu nueva contraseña.",
+						icon: "success"
+					});
+
+				} else {
+					const errorData = await response.json();
+					Swal.fire({
+						title: "Error",
+						text: errorData.msg || "Hubo un problema al recuperar la contraseña.",
+						icon: "error"
+					});
+				}
+			} catch (error) {
+				console.error("Error al intentar recuperar la contraseña:", error);
+				Swal.fire({
+					title: "Error",
+					text: "Ocurrió un error al intentar recuperar la contraseña.",
+					icon: "error"
+				});
+			}
+		},
 	}
 };
 
