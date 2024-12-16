@@ -27,14 +27,67 @@ export const AdminPage = () => {
 		}));
 	};
 
-	const handleSubmit = (modalKey, action) => {
+	const handleEditUser = (modalKey, user_id) => {
 		const modalData = formValues[modalKey];
-		console.log(modalData);
-		console.log(modalKey);
-		// if (modalData) {
-		// 	action(modalData);
-		// }
-	};
+		if(modalData) {
+			const userData = {
+				is_admin: true
+			}
+			actions.updateUser(user_id, userData);
+		}
+
+	}
+
+	const handleEditBook = (modalKey, book_id) => {
+		const modalData = formValues[modalKey];
+		console.log(modalData)
+		if(modalData) {
+			const bookData = {
+				title: modalData.title,
+				author: modalData.author
+			}
+			actions.updateBook(book_id, bookData);
+		}
+	}
+
+	const handleDeleteBook = (book_id) => {
+		if(book_id) {
+			actions.deleteBook(book_id);
+		}
+	}
+
+	const handleCreateBook = (modalKey) => {
+		const modalData = formValues[modalKey];
+		if(modalData.title && modalData.author) {
+			const bookData = {
+				title: modalData.title,
+				author: modalData.author
+			}
+			actions.updateBook(bookData);
+		}
+		else {
+			alert("Null values not allowed")
+		}
+	}
+
+	const handleEditPlace = (modalKey, place_id) => {
+		const modalData = formValues[modalKey];
+		console.log(modalData)
+	}
+
+	const handleDeletePlace = (place_id) => {
+
+	}
+
+	const handleCreatePlace = (modalKey) => {
+		const modalData = formValues[modalKey];
+		console.log(modalData)
+	}
+
+	const handleEditSchedule = (modalKey, schedule_id) => {
+		const modalData = formValues[modalKey];
+		console.log(modalData)
+	}
 
 	return (
 		<div>
@@ -178,7 +231,7 @@ export const AdminPage = () => {
 															type="button"
 															className="btn btn-primary"
 															data-bs-dismiss="modal"
-															onClick={() => handleSubmit(`editUserModal-${index}`, (data) => actions.updateUser(usuario.user_id, data))}
+															onClick={() => handleEditUser(`editUserModal-${index}`, usuario.user_id)}
 														>
 															Confirmar
 														</button>
@@ -201,6 +254,7 @@ export const AdminPage = () => {
 								<th scope="col">#</th>
 								<th scope="col">Titulo</th>
 								<th scope="col">Autor</th>
+								<th scope="col">Disponible</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -210,6 +264,7 @@ export const AdminPage = () => {
 									<th scope="row">{index + 1}</th>
 									<td>{libro.title}</td>
 									<td>{libro.author}</td>
+									<td>{libro.is_active ? "Si" : "No"}</td>
 									<td>
 										<button
 											type="button"
@@ -267,10 +322,75 @@ export const AdminPage = () => {
 															type="button"
 															className="btn btn-primary"
 															data-bs-dismiss="modal"
-															onClick={() => handleSubmit(`editBookModal-${index}`, (data) => actions.updateBook({
-																book_id: libro.book_id,
-																...data
-															}))}
+															onClick={() => handleEditBook(`editBookModal-${index}`, libro.book_id)}
+														>
+															Confirmar
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										{/* Eliminar libro */}
+										<button type="button" className="btn btn-danger m-1" onClick={() => handleDeleteBook(libro.book_id)}>
+											<i className="fa-solid fa-trash"></i>
+										</button>
+										{/* Agregar libro */}
+										<button
+											type="button"
+											className="btn btn-primary m-1"
+											data-bs-toggle="modal"
+											data-bs-target={`#addBookModal-${index}`}
+										>
+											<i className="fa-solid fa-plus"></i>
+										</button>
+										<div
+											className="modal fade"
+											id={`addBookModal-${index}`}
+											tabIndex="-1"
+											aria-labelledby={`addBookModalLabel-${index}`}
+											aria-hidden="true"
+										>
+											<div className="modal-dialog">
+												<div className="modal-content">
+													<div className="modal-header">
+														<h1 className="modal-title fs-5" id={`addBookModalLabel-${index}`}>
+															Agregar Libro
+														</h1>
+														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div className="modal-body">
+														<form>
+															<div className="mb-3">
+																<label className="col-form-label">Titulo:</label>
+																<input
+																	type="text"
+																	className="form-control"
+																	name="title"
+																	value={formValues[`addBookModal-${index}`]?.title || ""}
+																	onChange={(e) => handleInputChange(e, `addBookModal-${index}`)}
+																/>
+															</div>
+															<div className="mb-3">
+																<label className="col-form-label">Autor:</label>
+																<input
+																	type="text"
+																	className="form-control"
+																	name="author"
+																	value={formValues[`addBookModal-${index}`]?.author || ""}
+																	onChange={(e) => handleInputChange(e, `addBookModal-${index}`)}
+																/>
+															</div>
+														</form>
+													</div>
+													<div className="modal-footer">
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+															Cerrar
+														</button>
+														<button
+															type="button"
+															className="btn btn-primary"
+															data-bs-dismiss="modal"
+															onClick={() => handleCreateBook(`addBookModal-${index}`)}
 														>
 															Confirmar
 														</button>
@@ -373,10 +493,85 @@ export const AdminPage = () => {
 															type="button"
 															className="btn btn-primary"
 															data-bs-dismiss="modal"
-															onClick={() => handleSubmit(`editPlaceModal-${index}`, (data) => actions.updatePlace({
-																place_id: local.place_id,
-																...data
-															}))}
+															onClick={() => handleEditPlace(`editPlaceModal-${index}`, local.place_id)}
+														>
+															Confirmar
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										{/* Eliminar local */}
+										<button type="button" className="btn btn-danger m-1" onClick={() => handleDeletePlace(local.local_id)}>
+											<i className="fa-solid fa-trash"></i>
+										</button>
+										{/* Agregar local */}
+										<button
+											type="button"
+											className="btn btn-primary m-1"
+											data-bs-toggle="modal"
+											data-bs-target={`#addPlaceModal-${index}`}
+										>
+											<i className="fa-solid fa-plus"></i>
+										</button>
+										<div
+											className="modal fade"
+											id={`addPlaceModal-${index}`}
+											tabIndex="-1"
+											aria-labelledby={`addPlaceModal-${index}`}
+											aria-hidden="true"
+										>
+											<div className="modal-dialog">
+												<div className="modal-content">
+													<div className="modal-header">
+														<h1 className="modal-title fs-5" id={`addPlaceModal-${index}`}>
+															Agregar Libro
+														</h1>
+														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div className="modal-body">
+														<form>
+															<div className="mb-3">
+																<label className="col-form-label">Nombre:</label>
+																<input
+																	type="text"
+																	className="form-control"
+																	name="name"
+																	value={formValues[`editPlaceModal-${index}`]?.name || ""}
+																	onChange={(e) => handleInputChange(e, `editPlaceModal-${index}`)}
+																/>
+															</div>
+															<div className="mb-3">
+																<label className="col-form-label">Capacidad:</label>
+																<input
+																	type="text"
+																	className="form-control"
+																	name="capacity"
+																	value={formValues[`editPlaceModal-${index}`]?.capacity || ""}
+																	onChange={(e) => handleInputChange(e, `editPlaceModal-${index}`)}
+																/>
+															</div>
+															<div className="mb-3">
+																<label className="col-form-label">Dirección:</label>
+																<input
+																	type="text"
+																	className="form-control"
+																	name="address"
+																	value={formValues[`editPlaceModal-${index}`]?.address || ""}
+																	onChange={(e) => handleInputChange(e, `editPlaceModal-${index}`)}
+																/>
+															</div>
+														</form>
+													</div>
+													<div className="modal-footer">
+														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+															Cerrar
+														</button>
+														<button
+															type="button"
+															className="btn btn-primary"
+															data-bs-dismiss="modal"
+															onClick={() => handleCreatePlace(`editPlaceModal-${index}`)}
 														>
 															Confirmar
 														</button>
@@ -465,7 +660,7 @@ export const AdminPage = () => {
 															type="button"
 															className="btn btn-primary"
 															data-bs-dismiss="modal"
-															onClick={() => handleMakeUserAdmin(usuario, index)}
+															onClick={() => handleEditSchedule(`editScheduleModal-${index}`, schedule.schedule.id)}
 														>
 															Confirmar
 														</button>
