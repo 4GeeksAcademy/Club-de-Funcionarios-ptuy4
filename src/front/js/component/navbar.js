@@ -37,45 +37,54 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-light andaBackgroundColor h-100">
+    <nav className="andaBackgroundColor h-100 navbar navbar-expand-lg navbar-light">
       <div className="container d-flex align-items-center justify-content-between">
-      {!store.isAuthenticated && (
-        <Link to="/">
-          <img
-            src="https://i.ibb.co/zrCKh8H/logo-anda-blanco.png"
-            alt="Logo ANDA"
-            style={{ height: "10vh", width: "15vh" }}
-          />
-        </Link>
+        {!store.isAuthenticated && (
+          <Link to="/">
+            <img
+              src="https://i.ibb.co/zrCKh8H/logo-anda-blanco.png"
+              alt="Logo ANDA"
+              style={{ height: "10vh", width: "15vh" }}
+            />
+          </Link>
         )}
-      {store.isAuthenticated && (
-        <Link to="/userLogin">
-          <img
-            src="https://i.ibb.co/zrCKh8H/logo-anda-blanco.png"
-            alt="Logo ANDA"
-            style={{ height: "10vh", width: "15vh" }}
-          />
-        </Link>
+        {store.isAuthenticated && (
+          <Link to="/userLogin">
+            <img
+              src="https://i.ibb.co/zrCKh8H/logo-anda-blanco.png"
+              alt="Logo ANDA"
+              style={{ height: "10vh", width: "15vh" }}
+            />
+          </Link>
         )}
         {/* Mostrar solo si el usuario está logueado */}
-        {store.isAuthenticated && (
-          <div className="d-flex gap-4">
-            <Link to="/profile" className="text-decoration-none text-white">
-              Mi Perfil
-            </Link>
-            <Link to="/myReservations" className="text-decoration-none text-white">
-              Mis Reservas
-            </Link>
-
-            {/* Mostrar "Administrar Locales y Libros" solo si el usuario es admin */}
-            {store.user && store.user.is_admin === true && 
-  <Link to="/adminPage" className="text-decoration-none text-white">
-    Administrar Locales y Libros
-  </Link>
-}
+        <button className="navbar-toggler float-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <ul className="navbar-nav">
+        <div className="d-flex justify-content-end">
+          <div className="collapse navbar-collapse" id="navbarNav">
+            
+              {store.isAuthenticated && (
+                <div className="d-flex gap-4">
+                  <Link to="/profile" className="text-decoration-none text-white">
+                    Mi Perfil
+                  </Link>
+                  <Link to="/myReservations" className="text-decoration-none text-white">
+                    Mis Reservas
+                  </Link>
+                  
+                  {/* Mostrar "Administrar Locales y Libros" solo si el usuario es admin */}
+                  {store.user && store.user.is_admin === true &&
+                      <Link to="/adminPage" className="text-decoration-none text-white">
+                      Administrar Locales y Libros
+                    </Link>
+                  }
+                </div>
+              )}
           </div>
-        )}
-
+        </div>
+        </ul>
         {/* Dropdown o botón de login/logout */}
         <div className="ml-auto">
           {!store.isAuthenticated ? (
@@ -148,7 +157,9 @@ export const Navbar = () => {
             </button>
           )}
         </div>
-      </div>
+      </div> 
     </nav>
   );
 };
+
+
