@@ -2,6 +2,7 @@ import os
 import smtplib
 import string
 import random
+import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Flask, request, jsonify, url_for, Blueprint
@@ -465,8 +466,7 @@ def recoverPassword():
     # Generar una nueva contraseña aleatoria
     new_password = generate_random_password()
 
-    print(new_password)
-
+    
     # Encriptar la nueva contraseña antes de guardarla
     hashed_password = generate_password_hash(new_password)
 
@@ -474,7 +474,27 @@ def recoverPassword():
     user.password = hashed_password
     db.session.commit()
 
-    return jsonify({"message": "Password reovery succesefuly"}), 200
+    email_data = {
+        'to': email,
+        'subject': 'Recuperación de contraseña',
+        'body': f"Tu nueva contraseña es: {new_password}. No olvides cambiarla después de iniciar sesión."
+    }
+
+    try:
+        # Hacer la solicitud POST a tu API de correo
+        response = requests.post(f"{os.getenv('BACKEND_URL')}/api/send-email", json=email_data)
+
+        
+        if response.status_code == 200:
+            return jsonify({"msg": "Correo enviado con la nueva contraseña"}), 200
+        else:
+           
+            return jsonify({"error": "Error al enviar el correo"}), 500
+
+    except Exception as e:
+        return jsonify({"error": f"Error al enviar el correo: {str(e)}"}), 500
+    
+    #return jsonify({"message": "Password reovery succesefuly"}), 200
     # Datos para el correo        
 
 @api.route('/protected', methods=['GET'])

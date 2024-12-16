@@ -58,7 +58,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 								"Content-Type": "application/json",
 							},
 							body: JSON.stringify(emailData),
+							
 						});
+						data = emailResponse.json()
+						console.log(data)
+
 						return true;
 					} else {
 						Swal.fire({
