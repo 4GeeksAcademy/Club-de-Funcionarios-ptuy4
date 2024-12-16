@@ -122,6 +122,7 @@ export const AdminPage = () => {
 			image_url ? placeData.image_url = image_url : null
 
 			actions.updatePlace(place_id, placeData);
+			actions.getPlaces();
 		}
 	}
 
