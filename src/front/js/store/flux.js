@@ -1,5 +1,7 @@
 import Swal from 'sweetalert2'
 
+import Swal from 'sweetalert2'
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -69,6 +71,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Error al registrar el usuario",
 							footer: data.msg
 						  });
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: "Error al registrar el usuario",
+							footer: data.msg
+						  });
 						return false;
 					}
 				} catch (error) {
@@ -95,6 +103,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ token: data.token, user: data.user, isAuthenticated: true });
 						return true;
 					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: "Error al iniciar sesión",
+							footer: data.msg
+						  });
 						Swal.fire({
 							icon: "error",
 							title: "Oops...",
@@ -191,6 +205,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Libro creado con éxito!",
 							icon: "success"
 						  });
+						Swal.fire({
+							title: "Libro",
+							text: "Libro creado con éxito!",
+							icon: "success"
+						  });
 						await getActions().getBooks();
 					}
 				} catch (error) {
@@ -205,6 +224,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({ name, address, capacity })
 					});
 					if (response.ok) {
+						Swal.fire({
+							title: "Local",
+							text: "Local creado con éxito!",
+							icon: "success"
+						  });
 						Swal.fire({
 							title: "Local",
 							text: "Local creado con éxito!",
@@ -320,6 +344,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Usuario actualizado con éxito!",
 							icon: "success"
 						  });
+						Swal.fire({
+							title: "Actualizado",
+							text: "Usuario actualizado con éxito!",
+							icon: "success"
+						  });
 						await getActions().getUsers();
 					}
 				} catch (error) {
@@ -335,6 +364,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({ is_admin })
 					});
 					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Libro actualizado con éxito!",
+							icon: "success"
+						  });
 						Swal.fire({
 							title: "Actualizado",
 							text: "Libro actualizado con éxito!",

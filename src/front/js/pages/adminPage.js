@@ -255,6 +255,7 @@ export const AdminPage = () => {
 								<th scope="col">Titulo</th>
 								<th scope="col">Autor</th>
 								<th scope="col">Disponible</th>
+								<th scope="col">Disponible</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -415,6 +416,7 @@ export const AdminPage = () => {
 								<th scope="col">Capacidad</th>
 								<th scope="col">Dirección</th>
 								<th scope="col">Activo</th>
+								<th scope="col">Activo</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -443,6 +445,14 @@ export const AdminPage = () => {
 											aria-labelledby={`editPlaceModalLabel-${index}`}
 											aria-hidden="true"
 										>
+
+										<div
+											className="modal fade"
+											id={`editPlaceModal-${index}`}
+											tabIndex="-1"
+											aria-labelledby={`editPlaceModalLabel-${index}`}
+											aria-hidden="true"
+										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
@@ -452,6 +462,7 @@ export const AdminPage = () => {
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
 													<div className="modal-body">
+														<p>Puedes dejar vacíos los campos que no quieras actualizar</p>
 														<form>
 															<div className="mb-3">
 																<label className="col-form-label">Nombre:</label>
@@ -621,16 +632,16 @@ export const AdminPage = () => {
 
 										<div
 											className="modal fade"
-											id={`editScheduleModal-${index}`}
+											id={`editUserModal-${index}`}
 											tabIndex="-1"
-											aria-labelledby={`editScheduleModalLabel-${index}`}
+											aria-labelledby={`editUserModalLabel-${index}`}
 											aria-hidden="true"
 										>
 											<div className="modal-dialog">
 												<div className="modal-content">
 													<div className="modal-header">
-														<h1 className="modal-title fs-5" id={`editScheduleModalLabel-${index}`}>
-															Editar Reserva
+														<h1 className="modal-title fs-5" id={`editUserModalLabel-${index}`}>
+															Editar Usuario
 														</h1>
 														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
