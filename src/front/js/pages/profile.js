@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export const Profile = () => {
   const { store, actions } = useContext(Context);
   const user = store.user;
+  const navigate = useNavigate();
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
@@ -29,6 +31,8 @@ export const Profile = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         actions.deleteUser(user.id);
+        actions.logout();
+        navigate("/");
       }
     });
   };

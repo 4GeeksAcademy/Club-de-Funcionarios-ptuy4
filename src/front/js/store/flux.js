@@ -1,5 +1,4 @@
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom';
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -401,85 +400,83 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Usuario eliminado con éxito!",
 							icon: "success"
 						});
-						await getActions().logout();
-						navigate('/');
 					}
 				} catch (error) {
 					console.error("Error al eliminar usuario:", error);
 				}
-			}
-		},
+			},
 
-		deleteBook: async (book_id) => {
-			try {
-				const response = await fetch(`${process.env.BACKEND_URL}api/book/${book_id}`, {
-					method: "DELETE",
-					headers: { "Content-Type": "application/json" }
-				});
-				if (response.ok) {
-					Swal.fire({
-						title: "Eliminado",
-						text: "Libro eliminado con éxito!",
-						icon: "success"
+			deleteBook: async (book_id) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/book/${book_id}`, {
+						method: "DELETE",
+						headers: { "Content-Type": "application/json" }
 					});
-					await getActions().getBooks();
+					if (response.ok) {
+						Swal.fire({
+							title: "Eliminado",
+							text: "Libro eliminado con éxito!",
+							icon: "success"
+						});
+						await getActions().getBooks();
+					}
+				} catch (error) {
+					console.error("Error al eliminar libro:", error);
 				}
-			} catch (error) {
-				console.error("Error al eliminar libro:", error);
-			}
-		},
+			},
 
-		deletePlace: async (place_id) => {
-			try {
-				const response = await fetch(`${process.env.BACKEND_URL}api/place/${place_id}`, {
-					method: "DELETE",
-					headers: { "Content-Type": "application/json" }
-				});
-				if (response.ok) {
-					Swal.fire({
-						title: "Eliminado",
-						text: "Local eliminado con éxito!",
-						icon: "success"
+			deletePlace: async (place_id) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/place/${place_id}`, {
+						method: "DELETE",
+						headers: { "Content-Type": "application/json" }
 					});
-					await getActions().getBooks();
+					if (response.ok) {
+						Swal.fire({
+							title: "Eliminado",
+							text: "Local eliminado con éxito!",
+							icon: "success"
+						});
+						await getActions().getBooks();
+					}
+				} catch (error) {
+					console.error("Error al eliminar local:", error);
 				}
-			} catch (error) {
-				console.error("Error al eliminar local:", error);
-			}
-		},
+			},
 
-		recoverUserPass: async (email) => {
-			try {
-				const response = await fetch(`${process.env.BACKEND_URL}/api/recover-password`, {
-					method: "PUT",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ email })  // Enviar el correo electrónico
-				});
-
-				if (response.ok) {
-					Swal.fire({
-						title: "Recuperación exitosa",
-						text: "Te hemos enviado un correo con tu nueva contraseña.",
-						icon: "success"
+			recoverUserPass: async (email) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/recover-password`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ email })  // Enviar el correo electrónico
 					});
 
-				} else {
-					const errorData = await response.json();
+					if (response.ok) {
+						Swal.fire({
+							title: "Recuperación exitosa",
+							text: "Te hemos enviado un correo con tu nueva contraseña.",
+							icon: "success"
+						});
+
+					} else {
+						const errorData = await response.json();
+						Swal.fire({
+							title: "Error",
+							text: errorData.msg || "Hubo un problema al recuperar la contraseña.",
+							icon: "error"
+						});
+					}
+				} catch (error) {
+					console.error("Error al intentar recuperar la contraseña:", error);
 					Swal.fire({
 						title: "Error",
-						text: errorData.msg || "Hubo un problema al recuperar la contraseña.",
+						text: "Ocurrió un error al intentar recuperar la contraseña.",
 						icon: "error"
 					});
 				}
-			} catch (error) {
-				console.error("Error al intentar recuperar la contraseña:", error);
-				Swal.fire({
-					title: "Error",
-					text: "Ocurrió un error al intentar recuperar la contraseña.",
-					icon: "error"
-				});
-			}
-		},
+			},
+		}
 	}
 };
 
