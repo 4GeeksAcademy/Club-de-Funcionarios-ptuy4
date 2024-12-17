@@ -46,6 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							});
 						}
 						// Datos para el correo
+						console.log("EMPEZANDO TEMITA CON EL CORREO")
 						const emailData = {
 							to: email,
 							subject: "¡Bienvenido a nuestra plataforma!",
@@ -60,8 +61,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							body: JSON.stringify(emailData),
 
 						});
-						data = emailResponse.json()
-						console.log(data)
+						const resp = await emailResponse.json()
+						console.log(resp);
 
 						return true;
 					} else {
@@ -159,7 +160,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`);
 					if (!response.ok) throw new Error("Error al obtener reservas");
-
 					const data = await response.json();
 					setStore({ schedules: data });
 				} catch (error) {
@@ -307,8 +307,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						status: reserv.status,
 					};
 					const result = await createReservation(reservationData);
-					console.log(result);
-					// Actualizar store y retornar resultado
 					if (result.ok) {
 						await getActions().getSchedules();
 						return { success: true, message: "Reserva realizada exitosamente." };

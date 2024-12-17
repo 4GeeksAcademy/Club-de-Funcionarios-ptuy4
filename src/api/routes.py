@@ -47,10 +47,11 @@ def send_email():
             server.starttls()  # Iniciar conexión segura
             server.login(os.getenv("EMAIL_USER"), os.getenv("EMAIL_PASSWORD"))
             server.sendmail(os.getenv("EMAIL_USER"), recipient, message.as_string())
-
+            server.quit()
         return jsonify({"message": f"Correo enviado a {recipient}"}), 200
 
     except Exception as e:
+        print(e)
         return jsonify({"error": str(e)}), 500
 
 # Endpoint: Para subir imagen a Cloudinary
@@ -263,8 +264,6 @@ def update_place(id):
             upload_url = f"{os.getenv('BACKEND_URL')}api/upload-image"
             files = {'file': (file.filename, file.stream, file.mimetype)}
             upload_response = requests.post(upload_url, files=files)
-            print("Status Code:", upload_response.status_code)
-            print("Response Body:", upload_response.text)
             if upload_response.status_code == 200:
                 location.image_url = upload_response.json().get('url')
                 db.session.commit()
@@ -296,7 +295,7 @@ def get_schedules():
     result = [
         {
             "schedule_id": schedule.schedule_id,
-            "user_id": schedule.user_id,
+            "user_id": schedule.user.full_name,
             "book_id": schedule.book_id,
             "location_id": schedule.location_id,
             "start_time": schedule.start_time.isoformat(),
