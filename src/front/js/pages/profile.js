@@ -30,9 +30,8 @@ export const Profile = () => {
       confirmButtonText: "¡Si, hazlo!",
     }).then((result) => {
       if (result.isConfirmed) {
+        navigate("/register");
         actions.deleteUser(user.id);
-        actions.logout();
-        navigate("/");
       }
     });
   };

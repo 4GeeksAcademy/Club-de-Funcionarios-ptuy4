@@ -109,19 +109,23 @@ export const AdminPage = () => {
 
 	const handleEditPlace = (modalKey, place_id) => {
 		const modalData = formValues[modalKey];
+		const formData = new FormData();
 		let placeData = {};
 		if (modalData) {
 			let name = cleanValue(modalData.name);
 			let capacity = cleanValue(modalData.capacity);
 			let address = cleanValue(modalData.address);
-			let image_url = cleanValue(modalData.image_url)
+			let file = modalData.file;
 
 			name ? placeData.name = name : null
 			capacity ? placeData.capacity = capacity : null
 			address ? placeData.address = address : null
-			image_url ? placeData.image_url = image_url : null
 
 			actions.updatePlace(place_id, placeData);
+			if (file) {
+				formData.append("file", file);
+				actions.updateImagePlace(place_id, formData)
+			}
 			actions.getPlaces();
 		}
 	}
@@ -154,7 +158,7 @@ export const AdminPage = () => {
 				name: cleanValue(modalData.name),
 				capacity: cleanValue(modalData.capacity),
 				address: cleanValue(modalData.address),
-				image_url: cleanValue(modalData.image_url)
+				file: cleanValue(modalData.file)
 			};
 			if (placeData.name == null || placeData.capacity == null || placeData.address == null) {
 				Swal.fire({
@@ -746,6 +750,15 @@ export const AdminPage = () => {
 																		onChange={(e) => handleInputChange(e, `editPlaceModal-${index}`)}
 																	/>
 																</div>
+																<div className="mb-3">
+																	<label className="col-form-label">Foto:</label>
+																	<input
+																		type="file"
+																		className="form-control"
+																		name="file"
+																		onChange={(e) => handleInputChange(e, `editPlaceModal-${index}`)}
+																	/>
+																</div>
 															</form>
 														</div>
 														<div className="modal-footer">
@@ -826,6 +839,16 @@ export const AdminPage = () => {
 																		className="form-control"
 																		name="address"
 																		value={formValues[`addPlaceModal-${index}`]?.address || ""}
+																		onChange={(e) => handleInputChange(e, `addPlaceModal-${index}`)}
+																	/>
+																</div>
+																<div className="mb-3">
+																	<label className="col-form-label">Dirección:</label>
+																	<input
+																		type="file"
+																		className="form-control"
+																		name="file"
+																		value={formValues[`addPlaceModal-${index}`]?.file || ""}
 																		onChange={(e) => handleInputChange(e, `addPlaceModal-${index}`)}
 																	/>
 																</div>

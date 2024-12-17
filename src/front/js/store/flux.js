@@ -58,7 +58,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 								"Content-Type": "application/json",
 							},
 							body: JSON.stringify(emailData),
-							
+
 						});
 						data = emailResponse.json()
 						console.log(data)
@@ -370,6 +370,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			updateImagePlace: async (place_id, formData) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/place/${place_id}`, {
+						method: "PUT",
+						body: formData
+					});
+					if (response.ok) {
+						Swal.fire({
+							title: "Actualizado",
+							text: "Local actualizado con éxito!",
+							icon: "success"
+						});
+						await getActions().getPlaces();
+					}
+				} catch (error) {
+					console.error("Error al actualizar local:", error);
+				}
+			},
+
 			updateSchedule: async (schedule_id, schedule) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/schedule/${schedule_id}`, {
@@ -404,6 +423,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Usuario eliminado con éxito!",
 							icon: "success"
 						});
+						await getActions().logout();
 					}
 				} catch (error) {
 					console.error("Error al eliminar usuario:", error);
