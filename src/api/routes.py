@@ -389,7 +389,7 @@ def add_schedule():
     )
     db.session.add(new_schedule)
     db.session.commit()
-    return jsonify({"message": "Schedule added successfully", "schedule_id": new_schedule.schedule_id}), 201
+    return jsonify({"ok": True, "message": "Schedule added successfully", "schedule_id": new_schedule.schedule_id}), 201
 
 
 @api.route('/schedule/<int:id>', methods=['PUT'])

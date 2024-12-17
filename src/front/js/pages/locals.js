@@ -51,54 +51,52 @@ const Locals = () => {
         status: "reservado",
       };
 
+      // Llamar al método addSchedule para crear la reserva
       const result = await actions.addSchedule(reservationData);
 
-      // Formatear las fechas de inicio y fin tomadas del DateRange
-      const formattedStartDate = selectionRange.startDate.toLocaleDateString('es-ES', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
-      const formattedEndDate = selectionRange.endDate.toLocaleDateString('es-ES', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
+      // Verificar el resultado correctamente
+      if (result?.success) {
+        // Formatear las fechas para mostrarlas
+        const formatDate = (date) => date.toLocaleDateString('es-ES', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        });
+        const formattedStartDate = formatDate(selectionRange.startDate);
+        const formattedEndDate = formatDate(selectionRange.endDate);
 
-      // Comprobar el resultado de la reserva
-      if (result && result.success) {
+        // Mostrar mensaje de éxito
         Swal.fire({
           title: "<strong><u>Reserva realizada</u></strong>",
           icon: "success",
           html: `
-                  Reserva realizada exitosamente. 
-                  Fecha de inicio: ${formattedStartDate} 
-                  Fecha de fin: ${formattedEndDate},
-                `,
+                          Reserva realizada exitosamente.<br>
+                          <b>Fecha de inicio:</b> ${formattedStartDate}<br>
+                          <b>Fecha de fin:</b> ${formattedEndDate}
+                      `,
           showCloseButton: true,
-          showCancelButton: false,
-          focusConfirm: false,
-          confirmButtonText: `
-                  <i class="fa fa-thumbs-up"></i> Great!
-                `,
-          confirmButtonAriaLabel: "Thumbs up, great!"
+          confirmButtonText: `<i class="fa fa-thumbs-up"></i> ¡Genial!`,
+          confirmButtonAriaLabel: "Genial",
         });
-
-        setErrorMessage(successMessage);
       } else {
+        // Mostrar mensaje de error si el resultado indica fallo
         Swal.fire({
           icon: "error",
           title: "Oops...",
           html: `
-                  Tu reserva no se pudo realizar
-                  <b>${result?.error || "Error desconocido"}</b>,
-                `
+                          Tu reserva no se pudo realizar.<br>
+                          <b>${result?.error || "Error desconocido"}</b>
+                      `,
         });
       }
     } catch (error) {
+      // Manejo de errores inesperados
+      console.error("Error al manejar la reserva:", error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
         html: `
-                Tu reserva no se pudo realizar
-                <b>Error desconocido</b>,
-              `
+                      Tu reserva no se pudo realizar.<br>
+                      <b>Error desconocido</b>
+                  `,
       });
     }
   };

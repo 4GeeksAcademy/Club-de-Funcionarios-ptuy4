@@ -224,91 +224,104 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			addSchedule: async (reserv) => {
 				try {
-					// Obtener las reservas existentes
-					const getSchedulesResponse = await fetch(`${process.env.BACKEND_URL}api/schedule`);
-					if (!getSchedulesResponse.ok) throw new Error("Error al obtener reservas");
-					const reservations = await getSchedulesResponse.json();
+					const BASE_URL = `${process.env.BACKEND_URL}api/schedule`;
 
-					// Comprobar si el ítem está libre considerando book_id o location_id
-					const isItemFree = (item_id, isBook, start_date, end_date, reservations, status) => {
-						const formatDate = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
-						const startDate = formatDate(new Date(start_date));
-						const endDate = formatDate(new Date(end_date));
-
-						for (const reserva of reservations) {
-							const reservaItemId = isBook ? reserva.book_id : reserva.location_id;
-							if (reservaItemId === item_id) {
-								const reservaInicio = formatDate(new Date(reserva.start_time));
-								const reservaFin = formatDate(new Date(reserva.end_time));
-
-								if (reserva.status !== "cancelado" && !(startDate > reservaFin || endDate < reservaInicio)) {
-									return false; // no está disponible
-								}
-							}
-						}
-						return true; // Está disponible
+					// Función para obtener reservas existentes
+					const fetchReservations = async () => {
+						const response = await fetch(BASE_URL);
+						if (!response.ok) throw new Error("Error al obtener reservas");
+						return await response.json();
 					};
 
-					// Comprobar si la fecha de la reserva es anterior a hoy
-					const today = new Date();
-					today.setHours(0, 0, 0, 0);
-					const startDate = new Date(reserv.start_time);
-					const endDate = new Date(reserv.end_time);
+					// Función para verificar si una fecha está en el pasado
+					const isDateInPast = (date) => {
+						const today = new Date();
+						today.setHours(0, 0, 0, 0);
+						return new Date(date) < today;
+					};
 
-					if (startDate < today || endDate < today) {
-						return { error: "La fecha seleccionada no puede ser anterior a hoy." };
+					// Función para verificar si un ítem está disponible
+					const isItemAvailable = (itemId, isBook, startDate, endDate, reservations) => {
+						const formatDate = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+						const start = formatDate(new Date(startDate));
+						const end = formatDate(new Date(endDate));
+
+						return reservations.every((res) => {
+							const reservationItemId = isBook ? res.book_id : res.location_id;
+							if (reservationItemId !== itemId || res.status === "cancelado") return true;
+
+							const resStart = formatDate(new Date(res.start_time));
+							const resEnd = formatDate(new Date(res.end_time));
+							return start > resEnd || end < resStart;
+						});
+					};
+
+					// Función para contar reservas activas de libros por usuario
+					const countActiveBookReservations = (userId, reservations) => {
+						return reservations.filter(
+							(res) => res.user_id === userId && res.book_id !== null && res.status === "reservado"
+						).length;
+					};
+
+					// Función para realizar la reserva
+					const createReservation = async (reservation) => {
+						const response = await fetch(BASE_URL, {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify(reservation),
+						});
+						if (!response.ok) throw new Error("Error al realizar la reserva");
+						return await response.json();
+					};
+
+					// Obtener reservas existentes
+					const reservations = await fetchReservations();
+
+					// Validar fechas
+					if (isDateInPast(reserv.start_time) || isDateInPast(reserv.end_time)) {
+						return { success: false, error: "La fecha seleccionada no puede ser anterior a hoy." };
 					}
 
-					// Verificar si el usuario ya tiene 3 reservas activas de libros
+					// Validar límite de reservas activas para libros
 					if (reserv.book_id !== null) {
-						const activeBookReservations = reservations.filter(
-							(reservation) => reservation.user_id === reserv.user_id && reservation.book_id !== null && reservation.status === "reservado"
-						);
-
-						if (activeBookReservations.length >= 3) {
-							return { error: "El usuario no puede realizar más de 3 reservas de libros." };
+						const activeBooks = countActiveBookReservations(reserv.user_id, reservations);
+						if (activeBooks >= 3) {
+							return { success: false, error: "El usuario no puede realizar más de 3 reservas de libros." };
 						}
 					}
 
-					// Determinar si se trata de un libro o una ubicación
+					// Verificar disponibilidad del ítem
 					const isBook = reserv.book_id !== null;
 					const itemId = isBook ? reserv.book_id : reserv.location_id;
-
-					// Verificar disponibilidad
-					const available = isItemFree(itemId, isBook, reserv.start_time, reserv.end_time, reservations, reserv.status);
-
-					if (!available) {
-						return { error: "El ítem no está disponible en las fechas seleccionadas." };
+					if (!isItemAvailable(itemId, isBook, reserv.start_time, reserv.end_time, reservations)) {
+						return { success: false, error: "El ítem no está disponible en las fechas seleccionadas." };
 					}
 
-					// Realizar la reserva si está disponible
-					const response = await fetch(`${process.env.BACKEND_URL}api/schedule`, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							user_id: reserv.user_id,
-							book_id: reserv.book_id,
-							location_id: reserv.location_id,
-							start_time: reserv.start_time,
-							end_time: reserv.end_time,
-							status: reserv.status
-						})
-					});
-
-					const resp = await response.json();
-
-					if (resp.ok) {
-						await getActions().getSchedules(); // Actualiza el store llamando a la acción
-						return { success: "Reserva realizada exitosamente." };
+					// Crear reserva
+					const reservationData = {
+						user_id: reserv.user_id,
+						book_id: reserv.book_id,
+						location_id: reserv.location_id,
+						start_time: reserv.start_time,
+						end_time: reserv.end_time,
+						status: reserv.status,
+					};
+					const result = await createReservation(reservationData);
+					console.log(result);
+					// Actualizar store y retornar resultado
+					if (result.ok) {
+						await getActions().getSchedules();
+						return { success: true, message: "Reserva realizada exitosamente." };
 					} else {
-						return { error: "Error al realizar la reserva. Intenta nuevamente." };
+						return { success: false, error: "Error al realizar la reserva. Intenta nuevamente." };
 					}
 
 				} catch (error) {
 					console.error("Error al añadir reserva:", error);
-					return { error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
+					return { success: false, error: "Hubo un problema al procesar la reserva. Intenta nuevamente." };
 				}
 			},
+
 
 			//UPDATES
 
