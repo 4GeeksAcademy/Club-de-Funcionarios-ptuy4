@@ -23,7 +23,10 @@ export const AdminPage = () => {
 		return value.trim();
 	};
 
-
+	const formatDate = (date) => {
+		const formatedDate = date.split("T");
+		return formatedDate[0];
+	}
 
 	const handleInputChange = (e, modalKey) => {
 		const { name, type, value, files, checked } = e.target;
@@ -898,8 +901,8 @@ export const AdminPage = () => {
 									<th scope="row">{index + 1}</th>
 									<td>{schedule.user_id}</td>
 									<td>{schedule.location_id ? "Local" : "Libro"}</td>
-									<td>{schedule.start_time}</td>
-									<td>{schedule.end_time}</td>
+									<td>{formatDate(schedule.start_time)}</td>
+									<td>{formatDate(schedule.end_time)}</td>
 									<td>{schedule.status}</td>
 									<td>
 										<button
