@@ -213,7 +213,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Local creado con éxito!",
 							icon: "success"
 						});
-						await getActions().getPlaces(); // Refrescar Locales
+						await getActions().getPlaces();
+						const data = await response.json();
+						return data
 					}
 				} catch (error) {
 					console.error("Error al añadir Local:", error);
@@ -295,7 +297,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const resp = await response.json();
 
-					if (response.ok) {
+					if (resp.ok) {
 						await getActions().getSchedules(); // Actualiza el store llamando a la acción
 						return { success: "Reserva realizada exitosamente." };
 					} else {
@@ -461,7 +463,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							text: "Local eliminado con éxito!",
 							icon: "success"
 						});
-						await getActions().getBooks();
+						await getActions().getPlaces();
 					}
 				} catch (error) {
 					console.error("Error al eliminar local:", error);

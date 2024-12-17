@@ -6,17 +6,18 @@ import "react-date-range/dist/theme/default.css";
 import { es } from 'date-fns/locale';
 import "../../styles/index.css";
 import { Context } from "../store/appContext";
+import Swal from "sweetalert2";
 
 const Library = () => {
   const { store, actions } = useContext(Context);
   const [filteredbook, setFilteredbook] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
     key: "selection",
   });
-  
+
 
   useEffect(() => {
     actions.getBooks();
@@ -42,16 +43,16 @@ const Library = () => {
   const handleReservation = async (book) => {
     try {
       const reservationData = {
-        user_id: store.user.id, 
-        book_id: book.book_id, 
+        user_id: store.user.id,
+        book_id: book.book_id,
         location_id: null,
         start_time: selectionRange.startDate.toISOString(),
         end_time: selectionRange.endDate.toISOString(),
-        status: "reservado", 
+        status: "reservado",
       };
-      
+
       const result = await actions.addSchedule(reservationData);
-    
+
       // Formatear las fechas de inicio y fin tomadas del DateRange
       const formattedStartDate = selectionRange.startDate.toLocaleDateString('es-ES', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
@@ -59,31 +60,55 @@ const Library = () => {
       const formattedEndDate = selectionRange.endDate.toLocaleDateString('es-ES', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
-  
+
       // Comprobar el resultado de la reserva
       if (result && result.success) {
-        const successMessage = `Reserva realizada exitosamente. 
-                                Fecha de inicio: ${formattedStartDate} 
-                                Fecha de fin: ${formattedEndDate}`;
-        
+        Swal.fire({
+          title: "<strong><u>Reserva realizada</u></strong>",
+          icon: "success",
+          html: `
+            Reserva realizada exitosamente. 
+            Fecha de inicio: ${formattedStartDate} 
+            Fecha de fin: ${formattedEndDate},
+          `,
+          showCloseButton: true,
+          showCancelButton: false,
+          focusConfirm: false,
+          confirmButtonText: `
+            <i class="fa fa-thumbs-up"></i> Great!
+          `,
+          confirmButtonAriaLabel: "Thumbs up, great!"
+        });
+
         setErrorMessage(successMessage);
       } else {
-        // Si la respuesta del backend contiene un error, lo mostramos
-        const errorMessage = result?.error || "Error desconocido al hacer la reserva";
-        setErrorMessage(errorMessage);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html: `
+            Tu reserva no se pudo realizar
+            <b>${result?.error || "Error desconocido"}</b>,
+          `
+        });
       }
     } catch (error) {
-      // Captura cualquier error inesperado
-      setErrorMessage("Hubo un problema al procesar la reserva. Intenta nuevamente.");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        html: `
+          Tu reserva no se pudo realizar
+          <b>Error desconocido</b>,
+        `
+      });
     }
   };
-  
-  
+
+
 
   return (
     <div className="container-fluid">
       <div className="row">
-        
+
         <div
           className="col-12 col-md-5 d-flex flex-column align-items-center justify-content-center"
           style={{
@@ -134,7 +159,7 @@ const Library = () => {
             </button>
           </div>
 
-          
+
           {filteredbook.length > 0 && (
             <div className="search-results mb-4">
               <h5>Resultados de búsqueda:</h5>
@@ -145,24 +170,17 @@ const Library = () => {
                     className="list-group-item d-flex justify-content-between align-items-center"
                   >
                     <div className="d-flex">
-                      
+
                       <div>
                         <div className="fs-4 fw-bold">{book.title}</div>
                         <div>Autor: {book.author}</div>
-                        
+
                       </div>
                     </div>
                     <button className="btn btn-success" onClick={() => handleReservation(book)}>Reservar</button>
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
-
-          {/* Mostrar error debajo de los locales */}
-          {errorMessage && (
-            <div className="alert alert-danger mt-4">
-              {errorMessage}
             </div>
           )}
         </div>

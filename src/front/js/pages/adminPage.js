@@ -142,23 +142,19 @@ export const AdminPage = () => {
 		}).then((result) => {
 			if (result.isConfirmed) {
 				actions.deletePlace(place_id);
-				Swal.fire({
-					title: "Eliminado!",
-					text: "El local se ha dado de baja",
-					icon: "success"
-				});
 			}
 		});
 	}
 
-	const handleCreatePlace = (modalKey) => {
+	const handleCreatePlace = async (modalKey) => {
 		const modalData = formValues[modalKey];
+		const formData = new FormData();
 		if (modalData) {
+			let file = modalData.file;
 			const placeData = {
 				name: cleanValue(modalData.name),
 				capacity: cleanValue(modalData.capacity),
-				address: cleanValue(modalData.address),
-				file: cleanValue(modalData.file)
+				address: cleanValue(modalData.address)
 			};
 			if (placeData.name == null || placeData.capacity == null || placeData.address == null) {
 				Swal.fire({
@@ -167,7 +163,11 @@ export const AdminPage = () => {
 					text: "¡No puedes crear un local sin nombre, capacidad y dirección!"
 				});
 			} else {
-				actions.addPlace(placeData);
+				const resp = await actions.addPlace(placeData);
+				if (file) {
+					formData.append("file", file);
+					actions.updateImagePlace(resp.location_id, formData)
+				}
 			}
 		}
 	}
@@ -781,7 +781,7 @@ export const AdminPage = () => {
 											<button
 												type="button"
 												className="btn btn-danger m-1"
-												onClick={() => handleDeletePlace(local.place_id)}
+												onClick={() => handleDeletePlace(local.location_id)}
 											>
 												<i className="fa-solid fa-trash"></i>
 											</button>
@@ -843,12 +843,11 @@ export const AdminPage = () => {
 																	/>
 																</div>
 																<div className="mb-3">
-																	<label className="col-form-label">Dirección:</label>
+																	<label className="col-form-label">Foto:</label>
 																	<input
 																		type="file"
 																		className="form-control"
 																		name="file"
-																		value={formValues[`addPlaceModal-${index}`]?.file || ""}
 																		onChange={(e) => handleInputChange(e, `addPlaceModal-${index}`)}
 																	/>
 																</div>

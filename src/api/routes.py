@@ -245,7 +245,6 @@ def add_place():
         name=data.get('name'),
         capacity=data.get('capacity'),
         address=data.get('address'),
-        image_url=data.get('image_url')
         )
     db.session.add(new_location)
     db.session.commit()

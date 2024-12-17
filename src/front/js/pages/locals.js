@@ -6,6 +6,7 @@ import "react-date-range/dist/theme/default.css";
 import { es } from 'date-fns/locale';
 import "../../styles/index.css";
 import { Context } from "../store/appContext";
+import Swal from "sweetalert2";
 
 const Locals = () => {
   const { store, actions } = useContext(Context);
@@ -62,19 +63,43 @@ const Locals = () => {
 
       // Comprobar el resultado de la reserva
       if (result && result.success) {
-        const successMessage = `Reserva realizada exitosamente. 
-                                Fecha de inicio: ${formattedStartDate} 
-                                Fecha de fin: ${formattedEndDate}`;
+        Swal.fire({
+          title: "<strong><u>Reserva realizada</u></strong>",
+          icon: "success",
+          html: `
+                  Reserva realizada exitosamente. 
+                  Fecha de inicio: ${formattedStartDate} 
+                  Fecha de fin: ${formattedEndDate},
+                `,
+          showCloseButton: true,
+          showCancelButton: false,
+          focusConfirm: false,
+          confirmButtonText: `
+                  <i class="fa fa-thumbs-up"></i> Great!
+                `,
+          confirmButtonAriaLabel: "Thumbs up, great!"
+        });
 
         setErrorMessage(successMessage);
       } else {
-        // Si la respuesta del backend contiene un error, lo mostramos
-        const errorMessage = result?.error || "Error desconocido al hacer la reserva";
-        setErrorMessage(errorMessage);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html: `
+                  Tu reserva no se pudo realizar
+                  <b>${result?.error || "Error desconocido"}</b>,
+                `
+        });
       }
     } catch (error) {
-      // Captura cualquier error inesperado
-      setErrorMessage("Hubo un problema al procesar la reserva. Intenta nuevamente.");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        html: `
+                Tu reserva no se pudo realizar
+                <b>Error desconocido</b>,
+              `
+      });
     }
   };
 

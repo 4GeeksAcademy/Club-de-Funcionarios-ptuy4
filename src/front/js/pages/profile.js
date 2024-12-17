@@ -46,7 +46,6 @@ export const Profile = () => {
       cleanValue(email) ? userData.email = email : null;
       cleanValue(password) ? userData.password = password : null
       actions.updateUser(user.id, userData);
-      Swal.fire("¡Éxito!", "Los cambios han sido guardados. Recuerda volver a iniciar sesión para ver tus cambios", "success");
     }
 
   };
@@ -61,7 +60,6 @@ export const Profile = () => {
             style={{ width: "18rem" }}
             alt="..."
           />
-          <button className="btn btn-primary col-4 mt-5">Cambiar foto</button>
         </div>
         <div className="col-md-8 bg-light rounded-3 my-2">
           <h5 className="card-title m-5" style={{ fontSize: "40px" }}>
