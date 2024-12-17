@@ -11,6 +11,7 @@ export const Profile = () => {
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
+  const [password, setPassword] = useState("");
 
   const cleanValue = (value) => {
     if (value === undefined || value.trim() === "") {
@@ -43,6 +44,7 @@ export const Profile = () => {
     } else {
       cleanValue(name) ? userData.full_name = name : null;
       cleanValue(email) ? userData.email = email : null;
+      cleanValue(password) ? userData.password = password : null
       actions.updateUser(user.id, userData);
       Swal.fire("¡Éxito!", "Los cambios han sido guardados. Recuerda volver a iniciar sesión para ver tus cambios", "success");
     }
@@ -128,6 +130,18 @@ export const Profile = () => {
                           id="e-mail"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="recipient-name" className="col-form-label">
+                          Contraseña:
+                        </label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          id="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </div>
                     </form>
